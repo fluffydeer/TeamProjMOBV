@@ -1,6 +1,20 @@
 package com.example.teamprojmobv
 
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+    }
+}
+
+
+//vypisovalo mi to chyby, daj to do camera fragmentu ak by sa dalo
+/*import android.os.Bundle
 import android.widget.Button
 import androidx.fragment.app.FragmentActivity
 
@@ -24,4 +38,4 @@ class MainActivity : FragmentActivity() {
         transaction.addToBackStack(null)
         transaction.commit()
     }
-}
+}*/

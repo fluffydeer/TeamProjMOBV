@@ -15,20 +15,23 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="20dp">
+
         <Button
             android:id="@+id/button_profile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
+            android:layout_width="50dp"
             android:layout_gravity="bottom|end"
-            android:text="Profile" />
+            android:background="@drawable/button_icon_profile_image" />
 
         <Button
             android:id="@+id/button_video_viewer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
+            android:layout_width="50dp"
             android:layout_gravity="bottom|start"
-            android:text="Videos" />
+            android:background="@drawable/button_icon_video_viewer" />
+
 
         <Button
             android:id="@+id/button_flip_camera"

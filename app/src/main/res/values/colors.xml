@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#03DAC5</color>
 
-    <color name="colorGrayLight">#FAFAFA</color>
-    <color name="colorGradientStart">#046C7A</color>
-    <color name="colorGradientEnd">#09C6DF</color>
-    <color name="colorGradientButtonStart">#0F9EB1</color>
-    <color name="colorGradientButtonEnd">#09C6DF</color>
+    <color name="grayLight">#FAFAFA</color>
+    <color name="gradientStart">#046C7A</color>
+    <color name="gradientEnd">#09C6DF</color>
+    <color name="gradientButtonStart">#0F9EB1</color>
+    <color name="gradientButtonEnd">#09C6DF</color>
+
+    <color name="buttonIcon">#FFF</color>
+    <color name="buttonIconPressed">#E6E8E7E7</color>
 
     <color name="colorWhite">#FFF</color>
 </resources>

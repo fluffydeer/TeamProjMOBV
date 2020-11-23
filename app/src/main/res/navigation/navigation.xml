@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/titleFragment"
-        android:name="com.example.teamprojmobv.TitleFragment"
+        android:name="com.example.teamprojmobv.Views.TitleFragment"
         android:label="fragment_title"
         tools:layout="@layout/fragment_title" >
         <action
@@ -18,7 +18,7 @@
     </fragment>
     <fragment
         android:id="@+id/cameraFragment"
-        android:name="com.example.teamprojmobv.CameraFragment"
+        android:name="com.example.teamprojmobv.Views.CameraFragment"
         android:label="CameraFragment"
         tools:layout="@layout/fragment_camera">
         <action
@@ -30,7 +30,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.teamprojmobv.ProfileFragment"
+        android:name="com.example.teamprojmobv.Views.ProfileFragment"
         android:label="ProfileFragment"
         tools:layout="@layout/fragment_profile">
         <action
@@ -39,7 +39,7 @@
     </fragment>
     <fragment
         android:id="@+id/videoViewerFragment"
-        android:name="com.example.teamprojmobv.VideoViewerFragment"
+        android:name="com.example.teamprojmobv.Views.VideoViewerFragment"
         android:label="VideoViewerFragment"
         tools:layout="@layout/fragment_video_viewer">
         <action

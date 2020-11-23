@@ -76,13 +76,9 @@
             android:id="@+id/buttonChangePwd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_margin="15dp"
-            android:background="@drawable/button_style"
-            android:text="Change password"
-            android:textColor="@color/colorWhite"
-            android:textSize="15sp"
-            android:textStyle="bold" />
+            android:layout_gravity="center"
+            android:text="Change password" />
 
         <Button
             android:id="@+id/buttonLogout"
@@ -90,10 +86,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="15dp"
-            android:background="@drawable/button_style"
-            android:text="Logout"
-            android:textColor="@color/colorWhite"
-            android:textSize="15sp"
-            android:textStyle="bold" />
+            android:text="Logout" />
     </LinearLayout>
 </LinearLayout>

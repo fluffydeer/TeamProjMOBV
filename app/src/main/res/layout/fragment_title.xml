@@ -9,24 +9,24 @@
     tools:context=".TitleFragment">
 
     <!-- TODO: Update blank fragment layout -->
+
     <TextView
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Sign up/log in or whatever" />
+        android:text="Sign up/log in or whatever"
+        tools:layout_editor_absoluteX="-16dp"
+        tools:layout_editor_absoluteY="-258dp" />
 
     <Button
-        android:id="@+id/button_login"
+        android:id="@+id/buttonLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#03A9F4"
-        android:text="Log in"
+        android:text="Login"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView2"
-        app:layout_constraintVertical_bias="0.452" />
+        app:layout_constraintTop_toTopOf="@+id/textView2" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

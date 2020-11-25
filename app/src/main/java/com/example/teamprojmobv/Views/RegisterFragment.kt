@@ -1,10 +1,12 @@
 package com.example.teamprojmobv.Views
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.example.teamprojmobv.R
@@ -24,27 +26,22 @@ import org.json.JSONObject
 import retrofit2.Retrofit
 
 
-class TitleFragment : Fragment() {
-
+class RegisterFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_title, container, false)
-        //return inflater.inflate(R.layout.fragment_register, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        buttonLoginLOG.setOnClickListener {
-            Login()
-            view.findNavController().navigate(R.id.action_titleFragment_to_cameraFragment)
-        }
+        buttonRegisterREG.setOnClickListener {
+            Register()
 
-        textViewLOG.setOnClickListener{
-            view.findNavController().navigate(R.id.action_titleFragment_to_registerFragment)
+            //view.findNavController().navigate(R.id.action_titleFragment_to_cameraFragment)
         }
     }
 
-    private fun Login() {
+    private fun Register() {
 
         // Create Retrofit
         val retrofit = Retrofit.Builder()
@@ -54,12 +51,15 @@ class TitleFragment : Fragment() {
         // Create Service
         val service = retrofit.create(APIService::class.java)
 
+
+
         // Create JSON using JSONObject
         val jsonObject = JSONObject()
-        jsonObject.put("action", "login")
+        jsonObject.put("action", "register")
         jsonObject.put("apikey", "yS9zD3dI4uR2aK0cY9cS5pT6tK2rZ6")
-        jsonObject.put("username", editUserNameLOG)
-        jsonObject.put("password", editTextPasswordLOG)
+        jsonObject.put("email", editEmailREG)
+        jsonObject.put("username", editUserNameREG)
+        jsonObject.put("password", editTextPasswordREG)
 
         /*
         jsonObject.put("action", "register")
@@ -76,7 +76,7 @@ class TitleFragment : Fragment() {
 
         CoroutineScope(Dispatchers.IO).launch {
             // Do the POST request and get response
-            val response = service.loginUser(requestBody)
+            val response = service.createUser(requestBody)
 
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {

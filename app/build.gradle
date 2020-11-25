@@ -66,4 +66,9 @@ dependencies {
     // Kotlinx Serialization Converter
     implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.7.0'
 
+
+    implementation 'com.google.android.exoplayer:exoplayer:2.12.1'
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.12.1'
+    implementation 'com.google.android.exoplayer:exoplayer-dash:2.12.1'
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.12.1'
 }

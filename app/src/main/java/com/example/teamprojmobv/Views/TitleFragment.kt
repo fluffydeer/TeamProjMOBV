@@ -20,7 +20,7 @@ class TitleFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         buttonLogin.setOnClickListener {
-            view.findNavController().navigate(R.id.action_titleFragment_to_cameraFragment)
+            view.findNavController().navigate(R.id.action_titleFragment_to_videoViewerFragment)
         }
     }
 }

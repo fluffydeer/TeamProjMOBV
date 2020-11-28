@@ -2,16 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#F44336"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#090909"
     android:orientation="vertical">
+<!--    -->
 
     <!--<include layout="@layout/layout_buttons" />-->
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="cameraaa" />
+<!--    <View-->
+<!--        android:id="@+id/overlay"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:foreground="@android:color/transparent" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/textView"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="cameraaa" />-->
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -35,17 +43,27 @@
 
         <Button
             android:id="@+id/button_flip_camera"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|end"
-            android:text="Flip Camera" />
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginBottom="92dp"
+            android:layout_marginStart="32dp"
+            android:padding="4dp"
+            android:scaleType="fitCenter"
+            android:background="@drawable/ic_switch"
+            android:layout_gravity="bottom|end"
+            android:contentDescription="@string/switch_camera"
+            />
 
         <Button
             android:id="@+id/button_record"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="92dp"
+            android:layout_height="92dp"
+            android:layout_marginBottom="80dp"
+            android:scaleType="fitCenter"
+            android:background="@drawable/ic_shutter"
             android:layout_gravity="bottom|center"
-            android:text="Record" />
+            android:contentDescription="@string/capture_button_alt"
+            />
     </FrameLayout>
 
 </LinearLayout>

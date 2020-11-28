@@ -14,4 +14,10 @@
     <color name="buttonIconPressed">#E6E8E7E7</color>
 
     <color name="colorWhite">#FFF</color>
+
+
+
+    <color name="icActive">#FFFFFFFF</color>
+    <color name="icFocused">#DDFFFFFF</color>
+    <color name="icPressed">#AAFFFFFF</color>
 </resources>

@@ -114,7 +114,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
             android:layout_gravity="center"
-            android:text="Change password" />
+            android:drawableLeft="@drawable/ic_lock"
+            android:text="  Change password" />
 
         <Button
             android:id="@+id/buttonLogout"
@@ -122,6 +123,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="15dp"
-            android:text="Logout" />
+            android:drawableLeft="@drawable/ic_exit_to_app"
+            android:text="  Logout" />
     </LinearLayout>
 </LinearLayout>

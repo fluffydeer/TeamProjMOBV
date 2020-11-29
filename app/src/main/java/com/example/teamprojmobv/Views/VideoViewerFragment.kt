@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import com.example.teamprojmobv.R
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -24,6 +25,18 @@ class VideoViewerFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_video_viewer, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        button_profile.setOnClickListener {
+            view.findNavController().navigate(R.id.action_videoViewerFragment_to_profileFragment)
+        }
+
+        button_camera.setOnClickListener {
+            view.findNavController().navigate(R.id.action_videoViewerFragment_to_cameraFragment)
+        }
     }
 
     override fun onStart() {

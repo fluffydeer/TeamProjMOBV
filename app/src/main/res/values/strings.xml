@@ -4,4 +4,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="profile_pic">Profile picture</string>
     <string name="mail_icon">Mail icon</string>
+    <string name="switch_camera">Switch camera</string>
+    <string name="capture_button_alt">capture_button_alt</string>
 </resources>

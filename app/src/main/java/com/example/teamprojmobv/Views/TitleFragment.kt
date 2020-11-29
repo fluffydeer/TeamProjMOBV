@@ -34,9 +34,11 @@ class TitleFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         buttonLoginLOG.setOnClickListener {
             Login()
-            view.findNavController().navigate(R.id.action_titleFragment_to_cameraFragment)
+            view.findNavController().navigate(R.id.action_titleFragment_to_videoViewerFragment)
+
         }
 
         textViewLOG.setOnClickListener{

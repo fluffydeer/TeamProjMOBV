@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
-import android.graphics.Color
-import android.hardware.camera2.*
 import android.media.MediaCodec
 import android.media.MediaRecorder
 import android.media.MediaScannerConnection
@@ -14,15 +12,10 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.util.Log
 import android.util.Range
-import android.view.*
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
-import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import androidx.navigation.fragment.navArgs
 import com.example.teamprojmobv.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -30,7 +23,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import java.io.File
 import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -47,9 +39,6 @@ import android.view.Surface
 import android.view.SurfaceHolder
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.navArgs
 //import com.example.android.camera.utils.AutoFitSurfaceView
 //import com.example.android.camera.utils.OrientationLiveData
 //import com.example.android.camera.utils.getPreviewOutputSize
@@ -57,7 +46,6 @@ import androidx.navigation.fragment.navArgs
 //import com.example.android.camera2.video.CameraActivity
 //import com.example.android.camera2.video.R
 import kotlinx.android.synthetic.main.fragment_camera.*
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import java.util.Date
@@ -70,43 +58,26 @@ import kotlin.coroutines.suspendCoroutine
 import android.Manifest
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.os.Build
 import android.provider.MediaStore
 import android.widget.Button
 import android.widget.ImageView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
-class CameraFragment : Fragment() {
-//    private val cameraRequest = 1888
-//    lateinit var imageView: ImageView
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        setContentView(R.layout.fragment_camera)
-////        title = "KotlinApp"
-//        if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.CAMERA)
-//            == PackageManager.PERMISSION_DENIED)
-//            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), cameraRequest)
-//        imageView = findViewById(R.id.imageView)
-//        val photoButton: Button = findViewById(R.id.button)
-//        photoButton.setOnClickListener {
-//            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-//            startActivityForResult(cameraIntent, cameraRequest)
-//        }
-//    }
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if (requestCode == cameraRequest) {
-//            val photo: Bitmap = data?.extras?.get("data") as Bitmap
-//            imageView.setImageBitmap(photo)
-//        }
-//    }
+import com.example.android.camera.utils.AutoFitSurfaceView
+import com.example.android.camera.utils.OrientationLiveData
+import com.example.android.camera.utils.getPreviewOutputSize
+import com.example.teamprojmobv.my.BuildConfig
+//import com.example.android.camera2.video.BuildConfig
+//import com.example.android.camera2.video.CameraActivity
+//import com.example.android.camera2.video.R
 
-//    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-//                              savedInstanceState: Bundle?): View? {
-//        // Inflate the layout for this fragment
-//        return inflater.inflate(R.layout.fragment_camera, container, false)
-//    }
+@RequiresApi(Build.VERSION_CODES.M)
+class CameraFragment : Fragment() {
+
 
     /*override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -121,9 +92,9 @@ class CameraFragment : Fragment() {
     }*/
 
 
-    /** AndroidX navigation arguments */
+//    /** AndroidX navigation arguments */
 //    private val args: CameraFragmentArgs by navArgs()
-
+//
 //    /** Host's navigation controller */
 //    private val navController: NavController by lazy {
 //        Navigation.findNavController(requireActivity(), R.id.fragment_container)
@@ -138,34 +109,34 @@ class CameraFragment : Fragment() {
     /** [CameraCharacteristics] corresponding to the provided Camera ID */
     private val characteristics: CameraCharacteristics by lazy {
 //        cameraManager.getCameraCharacteristics(args.cameraId)
-        cameraManager.getCameraCharacteristics("back")
+        cameraManager.getCameraCharacteristics("0")         //0 back,1 front
     }
 
     /** File where the recording will be saved */
     private val outputFile: File by lazy { createFile(requireContext(), "mp4") }
 
-//    /**
-//     * Setup a persistent [Surface] for the recorder so we can use it as an output target for the
-//     * camera session without preparing the recorder
-//     */
-//    private val recorderSurface: Surface by lazy {
-//
-//        // Get a persistent Surface from MediaCodec, don't forget to release when done
-//        val surface = MediaCodec.createPersistentInputSurface()
-//
-//        // Prepare and release a dummy MediaRecorder with our new surface
-//        // Required to allocate an appropriately sized buffer before passing the Surface as the
-//        //  output target to the capture session
-//        createRecorder(surface).apply {
-//            prepare()
-//            release()
-//        }
-//
-//        surface
-//    }
+    /**
+     * Setup a persistent [Surface] for the recorder so we can use it as an output target for the
+     * camera session without preparing the recorder
+     */
+    private val recorderSurface: Surface by lazy {
 
-//    /** Saves the video recording */
-//    private val recorder: MediaRecorder by lazy { createRecorder(recorderSurface) }
+        // Get a persistent Surface from MediaCodec, don't forget to release when done
+        val surface = MediaCodec.createPersistentInputSurface()
+
+        // Prepare and release a dummy MediaRecorder with our new surface
+        // Required to allocate an appropriately sized buffer before passing the Surface as the
+        //  output target to the capture session
+        createRecorder(surface).apply {
+            prepare()
+            release()
+        }
+
+        surface
+    }
+
+    /** Saves the video recording */
+    private val recorder: MediaRecorder by lazy { createRecorder(recorderSurface) }
 
     /** [HandlerThread] where all camera operations run */
     private val cameraThread = HandlerThread("CameraThread").apply { start() }
@@ -188,8 +159,8 @@ class CameraFragment : Fragment() {
 //        }
 //    }
 
-//    /** Where the camera preview is displayed */
-//    private lateinit var viewFinder: AutoFitSurfaceView
+    /** Where the camera preview is displayed */
+    private lateinit var viewFinder: AutoFitSurfaceView
 
     /** Overlay on top of the camera preview */
     private lateinit var overlay: View
@@ -200,37 +171,31 @@ class CameraFragment : Fragment() {
     /** The [CameraDevice] that will be opened in this fragment */
     private lateinit var camera: CameraDevice
 
-//    /** Requests used for preview only in the [CameraCaptureSession] */
-//    private val previewRequest: CaptureRequest by lazy {
-//        // Capture request holds references to target surfaces
-//        session.device.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW).apply {
-//            // Add the preview surface target
-//            addTarget(viewFinder.holder.surface)
-//        }.build()
-//    }
+    /** Requests used for preview only in the [CameraCaptureSession] */
+    private val previewRequest: CaptureRequest by lazy {
+        // Capture request holds references to target surfaces
+        session.device.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW).apply {
+            // Add the preview surface target
+            addTarget(viewFinder.holder.surface)
+        }.build()
+    }
 
-//    /** Requests used for preview and recording in the [CameraCaptureSession] */
-//    private val recordRequest: CaptureRequest by lazy {
-//        // Capture request holds references to target surfaces
-//        session.device.createCaptureRequest(CameraDevice.TEMPLATE_RECORD).apply {
-//            // Add the preview and recording surface targets
-//            addTarget(viewFinder.holder.surface)
-//            addTarget(recorderSurface)
-//            // Sets user requested FPS for all targets
-//            set(CaptureRequest.CONTROL_AE_TARGET_FPS_RANGE, Range(args.fps, args.fps))
-//        }.build()
-//    }
+    /** Requests used for preview and recording in the [CameraCaptureSession] */
+    private val recordRequest: CaptureRequest by lazy {
+        // Capture request holds references to target surfaces
+        session.device.createCaptureRequest(CameraDevice.TEMPLATE_RECORD).apply {
+            // Add the preview and recording surface targets
+            addTarget(viewFinder.holder.surface)
+            addTarget(recorderSurface)
+            // Sets user requested FPS for all targets
+            set(CaptureRequest.CONTROL_AE_TARGET_FPS_RANGE, Range(30, 30))
+        }.build()
+    }
 
     private var recordingStartMillis: Long = 0L
 
-//    /** Live data listener for changes in the device orientation relative to the camera */
-//    private lateinit var relativeOrientation: OrientationLiveData
-
-//    override fun onCreateView(
-//        inflater: LayoutInflater,
-//        container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View? = inflater.inflate(R.layout.fragment_camera, container, false)
+    /** Live data listener for changes in the device orientation relative to the camera */
+    private lateinit var relativeOrientation: OrientationLiveData
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -238,154 +203,156 @@ class CameraFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_camera, container, false)
     }
 
-//    @SuppressLint("MissingPermission")
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//        overlay = view.findViewById(R.id.overlay)
-//        viewFinder = view.findViewById(R.id.view_finder)
-//
-//        viewFinder.holder.addCallback(object : SurfaceHolder.Callback {
-//            override fun surfaceDestroyed(holder: SurfaceHolder) = Unit
-//            override fun surfaceChanged(
-//                holder: SurfaceHolder,
-//                format: Int,
-//                width: Int,
-//                height: Int) = Unit
-//
-//            override fun surfaceCreated(holder: SurfaceHolder) {
-//
-//                // Selects appropriate preview size and configures view finder
-//                val previewSize = getPreviewOutputSize(
-//                    viewFinder.display, characteristics, SurfaceHolder::class.java)
-//                Log.d(TAG, "View finder size: ${viewFinder.width} x ${viewFinder.height}")
-//                Log.d(TAG, "Selected preview size: $previewSize")
-//                viewFinder.setAspectRatio(previewSize.width, previewSize.height)
-//
-//                // To ensure that size is set, initialize camera in the view's thread
-//                viewFinder.post { initializeCamera() }
-//            }
-//        })
-//
-////        // Used to rotate the output media to match device orientation
-////        relativeOrientation = OrientationLiveData(requireContext(), characteristics).apply {
-////            observe(viewLifecycleOwner, Observer {
-////                    orientation -> Log.d(TAG, "Orientation changed: $orientation")
-////            })
-////        }
-//    }
+    @SuppressLint("MissingPermission")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        overlay = view.findViewById(R.id.overlay)
+        viewFinder = view.findViewById(R.id.view_finder)
 
-//    /** Creates a [MediaRecorder] instance using the provided [Surface] as input */
-//    private fun createRecorder(surface: Surface) = MediaRecorder().apply {
-//        setAudioSource(MediaRecorder.AudioSource.MIC)
-//        setVideoSource(MediaRecorder.VideoSource.SURFACE)
-//        setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
-//        setOutputFile(outputFile.absolutePath)
-//        setVideoEncodingBitRate(RECORDER_VIDEO_BITRATE)
-//        if (args.fps > 0) setVideoFrameRate(args.fps)
-//        setVideoSize(args.width, args.height)
-//        setVideoEncoder(MediaRecorder.VideoEncoder.H264)
-//        setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
-//        setInputSurface(surface)
-//    }
+        viewFinder.holder.addCallback(object : SurfaceHolder.Callback {
+            override fun surfaceDestroyed(holder: SurfaceHolder) = Unit
+            override fun surfaceChanged(
+                holder: SurfaceHolder,
+                format: Int,
+                width: Int,
+                height: Int) = Unit
 
-//    /**
-//     * Begin all camera operations in a coroutine in the main thread. This function:
-//     * - Opens the camera
-//     * - Configures the camera session
-//     * - Starts the preview by dispatching a repeating request
-//     */
-//    @SuppressLint("ClickableViewAccessibility")
-//    private fun initializeCamera() = lifecycleScope.launch(Dispatchers.Main) {
-//
-//        // Open the selected camera
-//        camera = openCamera(cameraManager, args.cameraId, cameraHandler)
-//
-//        // Creates list of Surfaces where the camera will output frames
-//        val targets = listOf(viewFinder.holder.surface, recorderSurface)
-//
-//        // Start a capture session using our open camera and list of Surfaces where frames will go
-//        session = createCaptureSession(camera, targets, cameraHandler)
-//
-//        // Sends the capture request as frequently as possible until the session is torn down or
-//        //  session.stopRepeating() is called
-//        session.setRepeatingRequest(previewRequest, null, cameraHandler)
-//
-//        // React to user touching the capture button
-//        button_record.setOnTouchListener { view, event ->
-//            when (event.action) {
-//
-//                MotionEvent.ACTION_DOWN -> lifecycleScope.launch(Dispatchers.IO) {
-//
-//                    // Prevents screen rotation during the video recording
-//                    requireActivity().requestedOrientation =
-//                        ActivityInfo.SCREEN_ORIENTATION_LOCKED
-//
-//                    // Start recording repeating requests, which will stop the ongoing preview
-//                    //  repeating requests without having to explicitly call `session.stopRepeating`
-//                    session.setRepeatingRequest(recordRequest, null, cameraHandler)
-//
-//                    // Finalizes recorder setup and starts recording
-//                    recorder.apply {
-//                        // Sets output orientation based on current sensor value at start time
-//                        relativeOrientation.value?.let { setOrientationHint(it) }
-//                        prepare()
-//                        start()
-//                    }
-//                    recordingStartMillis = System.currentTimeMillis()
-//                    Log.d(TAG, "Recording started")
-//
+            override fun surfaceCreated(holder: SurfaceHolder) {
+
+                // Selects appropriate preview size and configures view finder
+                val previewSize = getPreviewOutputSize(
+                    viewFinder.display, characteristics, SurfaceHolder::class.java)
+                Log.d(TAG, "View finder size: ${viewFinder.width} x ${viewFinder.height}")
+                Log.d(TAG, "Selected preview size: $previewSize")
+                viewFinder.setAspectRatio(previewSize.width, previewSize.height)
+
+                // To ensure that size is set, initialize camera in the view's thread
+                viewFinder.post { initializeCamera() }
+            }
+        })
+
+//        // Used to rotate the output media to match device orientation
+//        relativeOrientation = OrientationLiveData(requireContext(), characteristics).apply {
+//            observe(viewLifecycleOwner, Observer {
+//                    orientation -> Log.d(TAG, "Orientation changed: $orientation")
+//            })
+//        }
+    }
+
+    /** Creates a [MediaRecorder] instance using the provided [Surface] as input */
+    private fun createRecorder(surface: Surface) = MediaRecorder().apply {
+        setAudioSource(MediaRecorder.AudioSource.MIC)
+        setVideoSource(MediaRecorder.VideoSource.SURFACE)
+        setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+        setOutputFile(outputFile.absolutePath)
+        setVideoEncodingBitRate(RECORDER_VIDEO_BITRATE)
+        if (30 > 0) setVideoFrameRate(30)
+        setVideoSize(1920, 1080)
+//        setVideoSize(1440, 1080)
+        setVideoEncoder(MediaRecorder.VideoEncoder.H264)
+        setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+        setInputSurface(surface)
+    }
+
+    /**
+     * Begin all camera operations in a coroutine in the main thread. This function:
+     * - Opens the camera
+     * - Configures the camera session
+     * - Starts the preview by dispatching a repeating request
+     */
+    @SuppressLint("ClickableViewAccessibility")
+    private fun initializeCamera() = lifecycleScope.launch(Dispatchers.Main) {
+
+        // Open the selected camera
+        val cameraId = 0
+        camera = openCamera(cameraManager, cameraId, cameraHandler)
+
+        // Creates list of Surfaces where the camera will output frames
+        val targets = listOf(viewFinder.holder.surface, recorderSurface)
+
+        // Start a capture session using our open camera and list of Surfaces where frames will go
+        session = createCaptureSession(camera, targets, cameraHandler)
+
+        // Sends the capture request as frequently as possible until the session is torn down or
+        //  session.stopRepeating() is called
+        session.setRepeatingRequest(previewRequest, null, cameraHandler)
+
+        // React to user touching the capture button
+        capture_button.setOnTouchListener { view, event ->
+            when (event.action) {
+
+                MotionEvent.ACTION_DOWN -> lifecycleScope.launch(Dispatchers.IO) {
+
+                    // Prevents screen rotation during the video recording
+                    requireActivity().requestedOrientation =
+                        ActivityInfo.SCREEN_ORIENTATION_LOCKED
+
+                    // Start recording repeating requests, which will stop the ongoing preview
+                    //  repeating requests without having to explicitly call `session.stopRepeating`
+                    session.setRepeatingRequest(recordRequest, null, cameraHandler)
+
+                    // Finalizes recorder setup and starts recording
+                    recorder.apply {
+                        // Sets output orientation based on current sensor value at start time
+                        relativeOrientation.value?.let { setOrientationHint(it) }
+                        prepare()
+                        start()
+                    }
+                    recordingStartMillis = System.currentTimeMillis()
+                    Log.d(TAG, "Recording started")
+
 //                    // Starts recording animation
 //                    overlay.post(animationTask)
-//                }
-//
-//                MotionEvent.ACTION_UP -> lifecycleScope.launch(Dispatchers.IO) {
-//
-//                    // Unlocks screen rotation after recording finished
-//                    requireActivity().requestedOrientation =
-//                        ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-//
-//                    // Requires recording of at least MIN_REQUIRED_RECORDING_TIME_MILLIS
-//                    val elapsedTimeMillis = System.currentTimeMillis() - recordingStartMillis
-//                    if (elapsedTimeMillis < MIN_REQUIRED_RECORDING_TIME_MILLIS) {
-//                        delay(MIN_REQUIRED_RECORDING_TIME_MILLIS - elapsedTimeMillis)
-//                    }
-//
-//                    Log.d(TAG, "Recording stopped. Output file: $outputFile")
-//                    recorder.stop()
-//
+                }
+
+                MotionEvent.ACTION_UP -> lifecycleScope.launch(Dispatchers.IO) {
+
+                    // Unlocks screen rotation after recording finished
+                    requireActivity().requestedOrientation =
+                        ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+
+                    // Requires recording of at least MIN_REQUIRED_RECORDING_TIME_MILLIS
+                    val elapsedTimeMillis = System.currentTimeMillis() - recordingStartMillis
+                    if (elapsedTimeMillis < MIN_REQUIRED_RECORDING_TIME_MILLIS) {
+                        delay(MIN_REQUIRED_RECORDING_TIME_MILLIS - elapsedTimeMillis)
+                    }
+
+                    Log.d(TAG, "Recording stopped. Output file: $outputFile")
+                    recorder.stop()
+
 //                    // Removes recording animation
 //                    overlay.removeCallbacks(animationTask)
-//
-//                    // Broadcasts the media file to the rest of the system
-//                    MediaScannerConnection.scanFile(
-//                        view.context, arrayOf(outputFile.absolutePath), null, null)
-//
-//                    // Launch external activity via intent to play video recorded using our provider
-//                    startActivity(Intent().apply {
-//                        action = Intent.ACTION_VIEW
-//                        type = MimeTypeMap.getSingleton()
-//                            .getMimeTypeFromExtension(outputFile.extension)
-//                        val authority = "${BuildConfig.APPLICATION_ID}.provider"
-//                        data = FileProvider.getUriForFile(view.context, authority, outputFile)
-//                        flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or
-//                                Intent.FLAG_ACTIVITY_CLEAR_TOP
-//                    })
-//
-//                    // Finishes our current camera screen
+
+                    // Broadcasts the media file to the rest of the system
+                    MediaScannerConnection.scanFile(
+                        view.context, arrayOf(outputFile.absolutePath), null, null)
+
+                    // Launch external activity via intent to play video recorded using our provider
+                    startActivity(Intent().apply {
+                        action = Intent.ACTION_VIEW
+                        type = MimeTypeMap.getSingleton()
+                            .getMimeTypeFromExtension(outputFile.extension)
+                        val authority = "${BuildConfig.APPLICATION_ID}.provider"
+                        data = FileProvider.getUriForFile(view.context, authority, outputFile)
+                        flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or
+                                Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    })
+
+                    // Finishes our current camera screen
 //                    delay(CameraActivity.ANIMATION_SLOW_MILLIS)
 //                    navController.popBackStack()
-//                }
-//            }
-//
-//            true
-//        }
-//    }
+                }
+            }
+
+            true
+        }
+    }
 
     /** Opens the camera and returns the opened device (as the result of the suspend coroutine) */
     @SuppressLint("MissingPermission")
     private suspend fun openCamera(
         manager: CameraManager,
-        cameraId: String,
+        cameraId: Int,
         handler: Handler? = null
     ): CameraDevice = suspendCancellableCoroutine { cont ->
         manager.openCamera(cameraId, object : CameraDevice.StateCallback() {
@@ -445,12 +412,12 @@ class CameraFragment : Fragment() {
         }
     }
 
-//    override fun onDestroy() {
-//        super.onDestroy()
-//        cameraThread.quitSafely()
-//        recorder.release()
-//        recorderSurface.release()
-//    }
+    override fun onDestroy() {
+        super.onDestroy()
+        cameraThread.quitSafely()
+        recorder.release()
+        recorderSurface.release()
+    }
 
     companion object {
         private val TAG = CameraFragment::class.java.simpleName
@@ -465,5 +432,9 @@ class CameraFragment : Fragment() {
         }
     }
 
+
+}
+
+private fun CameraManager.openCamera(cameraId: Int, stateCallback: CameraDevice.StateCallback, handler: Handler?) {
 
 }

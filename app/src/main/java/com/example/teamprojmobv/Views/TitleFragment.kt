@@ -92,7 +92,6 @@ class TitleFragment : Fragment() {
                     Log.d("Pretty Printed JSON :", prettyJson)
                     val user = gson.fromJson(prettyJson, LoggedUser::class.java)
 
-
                 } else {
 
                     Log.e("RETROFIT_ERROR", response.code().toString())

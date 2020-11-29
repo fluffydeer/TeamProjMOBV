@@ -15,6 +15,7 @@ import com.example.teamprojmobv.Request.LoggedUser
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import kotlinx.android.synthetic.main.fragment_register.*
+import kotlinx.android.synthetic.main.fragment_register.view.*
 import kotlinx.android.synthetic.main.fragment_title.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,14 +28,17 @@ import retrofit2.Retrofit
 
 
 class RegisterFragment : Fragment() {
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
         return inflater.inflate(R.layout.fragment_title, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        buttonRegisterREG.setOnClickListener {
+            buttonRegisterREG.setOnClickListener {
             Register()
 
             //view.findNavController().navigate(R.id.action_titleFragment_to_cameraFragment)

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/titleFragment">
+    app:startDestination="@id/permissionsFragment">
 
     <fragment
         android:id="@+id/titleFragment"
@@ -19,8 +19,7 @@
     <fragment
         android:id="@+id/cameraFragment"
         android:name="com.example.teamprojmobv.Views.CameraFragment"
-        android:label="CameraFragment"
-        tools:layout="@layout/fragment_camera_nic">
+        android:label="CameraFragment">
         <action
             android:id="@+id/action_cameraFragment_to_videoViewerFragment"
             app:destination="@id/videoViewerFragment" />
@@ -45,5 +44,13 @@
         <action
             android:id="@+id/action_videoViewerFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/permissionsFragment"
+        android:name="com.example.teamprojmobv.Views.PermissionsFragment"
+        android:label="PermissionsFragment" >
+        <action
+            android:id="@+id/action_permissionsFragment_to_titleFragment"
+            app:destination="@id/titleFragment" />
     </fragment>
 </navigation>

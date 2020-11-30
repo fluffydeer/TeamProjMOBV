@@ -58,6 +58,7 @@ import kotlin.coroutines.suspendCoroutine
 import android.Manifest
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.os.Build
 import android.provider.MediaStore
 import android.widget.Button
@@ -66,10 +67,15 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toDrawable
+import androidx.lifecycle.Observer
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 
 import com.example.android.camera.utils.AutoFitSurfaceView
 import com.example.android.camera.utils.OrientationLiveData
 import com.example.android.camera.utils.getPreviewOutputSize
+import com.example.teamprojmobv.MainActivity
 import com.example.teamprojmobv.my.BuildConfig
 //import com.example.android.camera2.video.BuildConfig
 //import com.example.android.camera2.video.CameraActivity
@@ -77,6 +83,7 @@ import com.example.teamprojmobv.my.BuildConfig
 
 @RequiresApi(Build.VERSION_CODES.M)
 class CameraFragment : Fragment() {
+    var idCamera = "0"      //"0" - back, "1" - front camera
 
 
     /*override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -97,7 +104,7 @@ class CameraFragment : Fragment() {
 //
 //    /** Host's navigation controller */
 //    private val navController: NavController by lazy {
-//        Navigation.findNavController(requireActivity(), R.id.fragment_container)
+////        Navigation.findNavController(requireActivity(), R.id.fragment_container)
 //    }
 
     /** Detects, characterizes, and connects to a CameraDevice (used for all camera operations) */
@@ -107,9 +114,9 @@ class CameraFragment : Fragment() {
     }
 
     /** [CameraCharacteristics] corresponding to the provided Camera ID */
-    private val characteristics: CameraCharacteristics by lazy {
+    val characteristics: CameraCharacteristics by lazy {
 //        cameraManager.getCameraCharacteristics(args.cameraId)
-        cameraManager.getCameraCharacteristics("0")         //0 back,1 front
+        cameraManager.getCameraCharacteristics(idCamera)
     }
 
     /** File where the recording will be saved */
@@ -144,20 +151,20 @@ class CameraFragment : Fragment() {
     /** [Handler] corresponding to [cameraThread] */
     private val cameraHandler = Handler(cameraThread.looper)
 
-//    /** Performs recording animation of flashing screen */
-//    private val animationTask: Runnable by lazy {
-//        Runnable {
-//            // Flash white animation
-//            overlay.foreground = Color.argb(150, 255, 255, 255).toDrawable()
-//            // Wait for ANIMATION_FAST_MILLIS
-//            overlay.postDelayed({
-//                // Remove white flash animation
-//                overlay.foreground = null
-//                // Restart animation recursively
-//                overlay.postDelayed(animationTask, CameraActivity.ANIMATION_FAST_MILLIS)
-//            }, CameraActivity.ANIMATION_FAST_MILLIS)
-//        }
-//    }
+    /** Performs recording animation of flashing screen */
+    private val animationTask: Runnable by lazy {
+        Runnable {
+            // Flash white animation
+            overlay.foreground = Color.argb(150, 255, 255, 255).toDrawable()
+            // Wait for ANIMATION_FAST_MILLIS
+            overlay.postDelayed({
+                // Remove white flash animation
+                overlay.foreground = null
+                // Restart animation recursively
+                overlay.postDelayed(animationTask, MainActivity.ANIMATION_FAST_MILLIS)
+            }, MainActivity.ANIMATION_FAST_MILLIS)
+        }
+    }
 
     /** Where the camera preview is displayed */
     private lateinit var viewFinder: AutoFitSurfaceView
@@ -231,12 +238,12 @@ class CameraFragment : Fragment() {
             }
         })
 
-//        // Used to rotate the output media to match device orientation
-//        relativeOrientation = OrientationLiveData(requireContext(), characteristics).apply {
-//            observe(viewLifecycleOwner, Observer {
-//                    orientation -> Log.d(TAG, "Orientation changed: $orientation")
-//            })
-//        }
+        // Used to rotate the output media to match device orientation
+        relativeOrientation = OrientationLiveData(requireContext(), characteristics).apply {
+            observe(viewLifecycleOwner, Observer {
+                    orientation -> Log.d(TAG, "Orientation changed: $orientation")
+            })
+        }
     }
 
     /** Creates a [MediaRecorder] instance using the provided [Surface] as input */
@@ -263,9 +270,22 @@ class CameraFragment : Fragment() {
     @SuppressLint("ClickableViewAccessibility")
     private fun initializeCamera() = lifecycleScope.launch(Dispatchers.Main) {
 
+        button_flip_camera.setOnClickListener {
+//            Log.d(TAG, "button_flip_camera.setOnClickListener")
+            if(idCamera == "0"){
+//                Log.d(TAG, "idCamera: 0 -> 1")
+                idCamera = "1"
+            }
+            else{
+//                Log.d(TAG, "idCamera: 1 -> 0")
+                idCamera = "0"
+            }
+
+        }
+
         // Open the selected camera
-        val cameraId = 0
-        camera = openCamera(cameraManager, cameraId, cameraHandler)
+
+        camera = openCamera(cameraManager, idCamera, cameraHandler)
 
         // Creates list of Surfaces where the camera will output frames
         val targets = listOf(viewFinder.holder.surface, recorderSurface)
@@ -301,8 +321,8 @@ class CameraFragment : Fragment() {
                     recordingStartMillis = System.currentTimeMillis()
                     Log.d(TAG, "Recording started")
 
-//                    // Starts recording animation
-//                    overlay.post(animationTask)
+                    // Starts recording animation
+                    overlay.post(animationTask)
                 }
 
                 MotionEvent.ACTION_UP -> lifecycleScope.launch(Dispatchers.IO) {
@@ -320,26 +340,27 @@ class CameraFragment : Fragment() {
                     Log.d(TAG, "Recording stopped. Output file: $outputFile")
                     recorder.stop()
 
-//                    // Removes recording animation
-//                    overlay.removeCallbacks(animationTask)
+                    // Removes recording animation
+                    overlay.removeCallbacks(animationTask)
 
                     // Broadcasts the media file to the rest of the system
                     MediaScannerConnection.scanFile(
                         view.context, arrayOf(outputFile.absolutePath), null, null)
 
-                    // Launch external activity via intent to play video recorded using our provider
-                    startActivity(Intent().apply {
-                        action = Intent.ACTION_VIEW
-                        type = MimeTypeMap.getSingleton()
-                            .getMimeTypeFromExtension(outputFile.extension)
-                        val authority = "${BuildConfig.APPLICATION_ID}.provider"
-                        data = FileProvider.getUriForFile(view.context, authority, outputFile)
-                        flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or
-                                Intent.FLAG_ACTIVITY_CLEAR_TOP
-                    })
+
+//                    // Launch external activity via intent to play video recorded using our provider
+//                    startActivity(Intent().apply {
+//                        action = Intent.ACTION_VIEW
+//                        type = MimeTypeMap.getSingleton()
+//                            .getMimeTypeFromExtension(outputFile.extension)
+//                        val authority = "${BuildConfig.APPLICATION_ID}.provider"
+//                        data = FileProvider.getUriForFile(view.context, authority, outputFile)
+//                        flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or
+//                                Intent.FLAG_ACTIVITY_CLEAR_TOP
+//                    })
 
                     // Finishes our current camera screen
-//                    delay(CameraActivity.ANIMATION_SLOW_MILLIS)
+                    delay(MainActivity.ANIMATION_SLOW_MILLIS)
 //                    navController.popBackStack()
                 }
             }
@@ -352,7 +373,7 @@ class CameraFragment : Fragment() {
     @SuppressLint("MissingPermission")
     private suspend fun openCamera(
         manager: CameraManager,
-        cameraId: Int,
+        cameraId: String,
         handler: Handler? = null
     ): CameraDevice = suspendCancellableCoroutine { cont ->
         manager.openCamera(cameraId, object : CameraDevice.StateCallback() {
@@ -433,8 +454,27 @@ class CameraFragment : Fragment() {
     }
 
 
+    //*************************************************---------------------------------------------
+//    // Setup for button used to switch cameras
+//    controls.findViewById<ImageButton>(R.id.camera_switch_button).let {
+//
+//        // Disable the button until the camera is set up
+//        it.isEnabled = false
+//
+//        // Listener for button used to switch cameras. Only called if the button is enabled
+//        it.setOnClickListener {
+//            lensFacing = if (CameraSelector.LENS_FACING_FRONT == lensFacing) {
+//                CameraSelector.LENS_FACING_BACK
+//            } else {
+//                CameraSelector.LENS_FACING_FRONT
+//            }
+//            // Re-bind use cases to update selected camera
+//            bindCameraUseCases()
+//        }
+//    }
+
+
+
 }
 
-private fun CameraManager.openCamera(cameraId: Int, stateCallback: CameraDevice.StateCallback, handler: Handler?) {
 
-}

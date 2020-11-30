@@ -1,8 +1,5 @@
-package com.example.teamprojmobv.Views.ViewModels
+package com.example.teamprojmobv.views.viewModels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 
 class HomeViewModel : ViewModel() {

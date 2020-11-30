@@ -1,4 +1,4 @@
-package com.example.teamprojmobv.Views
+package com.example.teamprojmobv.views
 
 import android.annotation.SuppressLint
 import android.os.Bundle

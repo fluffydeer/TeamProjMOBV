@@ -1,4 +1,4 @@
-package com.example.teamprojmobv.Views
+package com.example.teamprojmobv.views
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,28 +7,23 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import com.example.teamprojmobv.R
-import com.example.teamprojmobv.Views.ViewModels.DatabaseViewModel
-import com.example.teamprojmobv.Views.ViewModels.HomeViewModel
-import com.example.teamprojmobv.databinding.FragmentRegisterBinding
-import com.opinyour.android.app.data.utils.Injection
+import com.example.teamprojmobv.views.viewModels.HomeViewModel
+import com.example.teamprojmobv.databinding.FragmentTitleBinding
 
 
-class RegisterFragment : Fragment() {
+class TitleFragment : Fragment() {
     private val homeViewModel: HomeViewModel by viewModels()
-    private lateinit var databaseViewModel:DatabaseViewModel
-    private lateinit var binding: FragmentRegisterBinding
+    private lateinit var binding: FragmentTitleBinding
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_register, container, false
+            inflater, R.layout.fragment_title, container, false
         )
         binding.lifecycleOwner = this
-        databaseViewModel = ViewModelProvider(this, Injection.provideViewModelFactory(requireContext()))
-            .get(DatabaseViewModel::class.java)
         //binding.model = homeViewModel
 
         return binding.root
@@ -37,14 +32,19 @@ class RegisterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-            binding.buttonRegisterREG.setOnClickListener {
-                databaseViewModel.register("register","yS9zD3dI4uR2aK0cY9cS5pT6tK2rZ6", binding.editEmailREG..toString(),
-                    binding.editUserNameREG.toString(), binding.editTextPasswordREG.toString())
-            //view.findNavController().navigate(R.id.action_titleFragment_to_cameraFragment)
+
+        binding.buttonLoginLOG.setOnClickListener {
+            //Login()
+            view.findNavController().navigate(R.id.action_titleFragment_to_videoViewerFragment)
+
+        }
+
+        binding.textViewLOG.setOnClickListener{
+            view.findNavController().navigate(R.id.action_titleFragment_to_registerFragment)
         }
     }
 /*
-    private fun Register() {
+    private fun Login() {
 
         // Create Retrofit
         val retrofit = Retrofit.Builder()
@@ -54,15 +54,12 @@ class RegisterFragment : Fragment() {
         // Create Service
         val service = retrofit.create(APIService::class.java)
 
-
-
         // Create JSON using JSONObject
         val jsonObject = JSONObject()
-        jsonObject.put("action", "register")
+        jsonObject.put("action", "login")
         jsonObject.put("apikey", "yS9zD3dI4uR2aK0cY9cS5pT6tK2rZ6")
-        jsonObject.put("email", editEmailREG)
-        jsonObject.put("username", editUserNameREG)
-        jsonObject.put("password", editTextPasswordREG)
+        jsonObject.put("username", editUserNameLOG)
+        jsonObject.put("password", editTextPasswordLOG)
 
         /*
         jsonObject.put("action", "register")
@@ -79,7 +76,7 @@ class RegisterFragment : Fragment() {
 
         CoroutineScope(Dispatchers.IO).launch {
             // Do the POST request and get response
-            val response = service.createUser(requestBody)
+            val response = service.loginUser(requestBody)
 
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
@@ -94,7 +91,6 @@ class RegisterFragment : Fragment() {
                     )
                     Log.d("Pretty Printed JSON :", prettyJson)
                     val user = gson.fromJson(prettyJson, LoggedUser::class.java)
-
 
                 } else {
 

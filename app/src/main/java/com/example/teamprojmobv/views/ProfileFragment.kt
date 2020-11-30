@@ -1,4 +1,4 @@
-package com.example.teamprojmobv.Views
+package com.example.teamprojmobv.views
 
 import android.content.Intent
 import android.net.Uri

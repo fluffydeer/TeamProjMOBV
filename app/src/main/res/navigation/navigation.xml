@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/titleFragment"
-        android:name="com.example.teamprojmobv.Views.TitleFragment"
+        android:name="com.example.teamprojmobv.views.TitleFragment"
         android:label="fragment_title"
         tools:layout="@layout/fragment_title" >
         <action
@@ -23,7 +23,7 @@
     </fragment>
     <fragment
         android:id="@+id/cameraFragment"
-        android:name="com.example.teamprojmobv.Views.CameraFragment"
+        android:name="com.example.teamprojmobv.views.CameraFragment"
         android:label="CameraFragment">
         <action
             android:id="@+id/action_cameraFragment_to_videoViewerFragment"
@@ -31,7 +31,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.teamprojmobv.Views.ProfileFragment"
+        android:name="com.example.teamprojmobv.views.ProfileFragment"
         android:label="ProfileFragment"
         tools:layout="@layout/fragment_profile">
         <action
@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/videoViewerFragment"
-        android:name="com.example.teamprojmobv.Views.VideoViewerFragment"
+        android:name="com.example.teamprojmobv.views.VideoViewerFragment"
         android:label="VideoViewerFragment"
         tools:layout="@layout/fragment_video_viewer">
         <action
@@ -52,7 +52,7 @@
     </fragment>
     <fragment
         android:id="@+id/permissionsFragment"
-        android:name="com.example.teamprojmobv.Views.PermissionsFragment"
+        android:name="com.example.teamprojmobv.views.PermissionsFragment"
         android:label="PermissionsFragment" >
         <action
             android:id="@+id/action_permissionsFragment_to_titleFragment"
@@ -60,7 +60,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.example.teamprojmobv.Views.RegisterFragment"
+        android:name="com.example.teamprojmobv.views.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" />
 </navigation>

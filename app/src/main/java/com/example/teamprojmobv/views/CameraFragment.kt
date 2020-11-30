@@ -1,8 +1,7 @@
-package com.example.teamprojmobv.Views
+package com.example.teamprojmobv.views
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.media.MediaCodec
 import android.media.MediaRecorder
@@ -12,8 +11,6 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.util.Log
 import android.util.Range
-import android.webkit.MimeTypeMap
-import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.teamprojmobv.R
@@ -46,37 +43,21 @@ import android.view.ViewGroup
 //import com.example.android.camera2.video.CameraActivity
 //import com.example.android.camera2.video.R
 import kotlinx.android.synthetic.main.fragment_camera.*
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.suspendCancellableCoroutine
 import java.util.Date
 import java.util.Locale
 import kotlin.RuntimeException
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
-import android.Manifest
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Build
-import android.provider.MediaStore
-import android.widget.Button
-import android.widget.ImageView
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.lifecycle.Observer
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
 
 import com.example.android.camera.utils.AutoFitSurfaceView
 import com.example.android.camera.utils.OrientationLiveData
 import com.example.android.camera.utils.getPreviewOutputSize
 import com.example.teamprojmobv.MainActivity
-import com.example.teamprojmobv.my.BuildConfig
+
 //import com.example.android.camera2.video.BuildConfig
 //import com.example.android.camera2.video.CameraActivity
 //import com.example.android.camera2.video.R

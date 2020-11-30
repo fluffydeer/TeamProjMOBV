@@ -18,7 +18,7 @@ package com.example.teamprojmobv.Data.util
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.teamprojmobv.Views.ViewModels.DatabaseViewModel
+import com.example.teamprojmobv.views.viewModels.DatabaseViewModel
 import com.example.teamprojmobv.Data.DataRepository
 
 

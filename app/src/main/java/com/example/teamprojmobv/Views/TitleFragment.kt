@@ -1,51 +1,49 @@
 package com.example.teamprojmobv.Views
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.teamprojmobv.R
-import com.example.teamprojmobv.Request.APIService
-import com.example.teamprojmobv.Request.LoggedUser
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonParser
-import kotlinx.android.synthetic.main.fragment_register.*
-import kotlinx.android.synthetic.main.fragment_title.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody.Companion.toRequestBody
-import org.json.JSONObject
-import retrofit2.Retrofit
+import com.example.teamprojmobv.Views.ViewModels.HomeViewModel
+import com.example.teamprojmobv.databinding.FragmentTitleBinding
 
 
 class TitleFragment : Fragment() {
+    private val homeViewModel: HomeViewModel by viewModels()
+    private lateinit var binding: FragmentTitleBinding
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_title, container, false)
-        //return inflater.inflate(R.layout.fragment_register, container, false)
+        // Inflate the layout for this fragment
+        binding = DataBindingUtil.inflate(
+            inflater, R.layout.fragment_title, container, false
+        )
+        binding.lifecycleOwner = this
+        //binding.model = homeViewModel
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
 
-        buttonLoginLOG.setOnClickListener {
-            Login()
+        binding.buttonLoginLOG.setOnClickListener {
+            //Login()
             view.findNavController().navigate(R.id.action_titleFragment_to_videoViewerFragment)
 
         }
 
-        textViewLOG.setOnClickListener{
+        binding.textViewLOG.setOnClickListener{
             view.findNavController().navigate(R.id.action_titleFragment_to_registerFragment)
         }
     }
-
+/*
     private fun Login() {
 
         // Create Retrofit
@@ -101,5 +99,5 @@ class TitleFragment : Fragment() {
                 }
             }
         }
-    }
+    }*/
 }

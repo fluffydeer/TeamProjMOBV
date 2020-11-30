@@ -1,50 +1,49 @@
 package com.example.teamprojmobv.Views
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.example.teamprojmobv.R
-import com.example.teamprojmobv.Request.APIService
-import com.example.teamprojmobv.Request.LoggedUser
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonParser
-import kotlinx.android.synthetic.main.fragment_register.*
-import kotlinx.android.synthetic.main.fragment_register.view.*
-import kotlinx.android.synthetic.main.fragment_title.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody.Companion.toRequestBody
-import org.json.JSONObject
-import retrofit2.Retrofit
+import com.example.teamprojmobv.Views.ViewModels.DatabaseViewModel
+import com.example.teamprojmobv.Views.ViewModels.HomeViewModel
+import com.example.teamprojmobv.databinding.FragmentRegisterBinding
+import com.opinyour.android.app.data.utils.Injection
 
 
 class RegisterFragment : Fragment() {
-
+    private val homeViewModel: HomeViewModel by viewModels()
+    private lateinit var databaseViewModel:DatabaseViewModel
+    private lateinit var binding: FragmentRegisterBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        return inflater.inflate(R.layout.fragment_title, container, false)
+        // Inflate the layout for this fragment
+        binding = DataBindingUtil.inflate(
+            inflater, R.layout.fragment_register, container, false
+        )
+        binding.lifecycleOwner = this
+        databaseViewModel = ViewModelProvider(this, Injection.provideViewModelFactory(requireContext()))
+            .get(DatabaseViewModel::class.java)
+        //binding.model = homeViewModel
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-            buttonRegisterREG.setOnClickListener {
-            Register()
-
+            binding.buttonRegisterREG.setOnClickListener {
+                databaseViewModel.register("register","yS9zD3dI4uR2aK0cY9cS5pT6tK2rZ6", binding.editEmailREG..toString(),
+                    binding.editUserNameREG.toString(), binding.editTextPasswordREG.toString())
             //view.findNavController().navigate(R.id.action_titleFragment_to_cameraFragment)
         }
     }
-
+/*
     private fun Register() {
 
         // Create Retrofit
@@ -104,5 +103,5 @@ class RegisterFragment : Fragment() {
                 }
             }
         }
-    }
+    }*/
 }

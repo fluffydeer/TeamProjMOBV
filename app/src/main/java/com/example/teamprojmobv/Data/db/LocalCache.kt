@@ -11,9 +11,16 @@ class LocalCache(private val dao: DbDao) {
         dao.insertUser(wordItems)
     }*/
 
+    suspend fun deleteUsers()
+    {
+        dao.deleteUsers()
+    }
+
     suspend fun insertUser(userItem: UserItem) {
         dao.insertUser(userItem)
     }
+
+    fun getActualUser(): LiveData<UserItem> = dao.getActualUser()
 
     /*suspend fun updateUser(userItem: UserItem) {
         dao.updateUser(userItem)
@@ -22,6 +29,7 @@ class LocalCache(private val dao: DbDao) {
     fun deleteUser(userItem: UserItem) {
         GlobalScope.launch { dao.deleteUser(userItem) }
     }
+
 
     fun getUser(): LiveData<List<UserItem>> = dao.getUser()*/
 

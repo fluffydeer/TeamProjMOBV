@@ -3,6 +3,7 @@ package com.example.teamprojmobv.views.viewModels
 
 import androidx.lifecycle.*
 import com.example.teamprojmobv.Data.DataRepository
+import com.example.viewmodel.data.db.model.UserItem
 import kotlinx.coroutines.launch
 
 class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
@@ -10,6 +11,9 @@ class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
     //val welcome = Transformations.map(email) { w -> "Slovo je: $w" }
     val username: MutableLiveData<String> = MutableLiveData()
     val password: MutableLiveData<String> = MutableLiveData()
+
+    val actualUser: LiveData<UserItem>
+        get() = repository.getActualUser()
 
 
     //fun register(action: String, apikey: String, email:String, username:String, password:String) {

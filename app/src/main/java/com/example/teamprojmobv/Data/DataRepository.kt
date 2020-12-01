@@ -1,6 +1,7 @@
 
 package com.example.teamprojmobv.Data
 
+import androidx.lifecycle.LiveData
 import com.example.teamprojmobv.Data.db.LocalCache
 import com.example.viewmodel.data.db.model.UserItem
 import com.opinyour.android.app.data.api.WebApi
@@ -30,7 +31,7 @@ class DataRepository private constructor(
             }
     }
 
-    //fun getWords(): LiveData<List<WordItem>> = cache.getWords()
+     fun getActualUser(): LiveData<UserItem> = cache.getActualUser()
 
 
     suspend fun createUser(
@@ -56,6 +57,7 @@ class DataRepository private constructor(
             if (response.isSuccessful) {
                 response.body()?.let {
 
+                    //cache.deleteUsers()
                     return cache.insertUser(
                         UserItem(it.id, it.username, it.email, it.token, it.refresh, it.profile)
                         )
@@ -91,7 +93,7 @@ class DataRepository private constructor(
             val response = api.loginUser(requestBody)
             if (response.isSuccessful) {
                 response.body()?.let {
-
+                    //cache.deleteUsers()
                     return cache.insertUser(
                         UserItem(it.id, it.username, it.email, it.token, it.refresh, it.profile)
                     )

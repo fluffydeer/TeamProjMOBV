@@ -58,9 +58,11 @@ class TitleFragment : Fragment() {
             //Login()
             // register aj apikey dat ako konstanty, hashovat heslo
             databaseViewModel.login(ApiConstants.LOGIN_CONST,ApiConstants.API_KEY)
+
+            val myvalye = databaseViewModel.actualUser
             //view.findNavController().navigate(R.id.action_titleFragment_to_cameraFragment)
 
-            view.findNavController().navigate(R.id.action_titleFragment_to_videoViewerFragment)
+            //view.findNavController().navigate(R.id.action_titleFragment_to_videoViewerFragment)
         }
 
         binding.textViewLOG.setOnClickListener{

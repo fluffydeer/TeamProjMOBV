@@ -11,12 +11,18 @@ interface DbDao {
     suspend fun insertUser(userItem: UserItem)
 
     @Update
-    suspend fun updateUser(wordItem: UserItem)
+    suspend fun updateUser(userItem: UserItem)
 
     @Delete
-    suspend fun deleteUser(wordItem: UserItem)
+    suspend fun deleteUser(userItem: UserItem)
+
+    @Query("DELETE FROM users")
+    fun deleteUsers()
 
     @Query("SELECT * FROM users")
     fun getUser(): LiveData<List<UserItem>>
+
+    @Query("SELECT * FROM users")
+    fun getActualUser(): LiveData<UserItem>
 
 }

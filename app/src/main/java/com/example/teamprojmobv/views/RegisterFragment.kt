@@ -63,7 +63,6 @@ class RegisterFragment : Fragment() {
                     binding.editTextPasswordREG.requestFocus()
                     return@setOnClickListener
                 }
-                
                 // hashovat heslo
                 databaseViewModel.register(ApiConstants.REG_CONST,ApiConstants.API_KEY)
             //view.findNavController().navigate(R.id.action_titleFragment_to_cameraFragment)

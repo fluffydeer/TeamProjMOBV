@@ -6,17 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import com.example.teamprojmobv.Data.ApiConstants
 import com.example.teamprojmobv.R
-import com.example.teamprojmobv.views.viewModels.HomeViewModel
 import com.example.teamprojmobv.databinding.FragmentTitleBinding
+import com.example.teamprojmobv.views.viewModels.DatabaseViewModel
+import com.opinyour.android.app.data.utils.Injection
 
 
 class TitleFragment : Fragment() {
-    private val homeViewModel: HomeViewModel by viewModels()
+    private lateinit var databaseViewModel: DatabaseViewModel
     private lateinit var binding: FragmentTitleBinding
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -24,7 +25,9 @@ class TitleFragment : Fragment() {
             inflater, R.layout.fragment_title, container, false
         )
         binding.lifecycleOwner = this
-        //binding.model = homeViewModel
+        databaseViewModel = ViewModelProvider(this, Injection.provideViewModelFactory(requireContext()))
+            .get(DatabaseViewModel::class.java)
+        binding.model = databaseViewModel
 
         return binding.root
     }
@@ -34,9 +37,30 @@ class TitleFragment : Fragment() {
 
 
         binding.buttonLoginLOG.setOnClickListener {
-            //Login()
-            view.findNavController().navigate(R.id.action_titleFragment_to_videoViewerFragment)
 
+            val username = databaseViewModel.username.value
+            val password = databaseViewModel.password.value
+
+            if(username.isNullOrBlank())
+            {
+                binding.editUserNameLOG.error = "Username required"
+                binding.editUserNameLOG.requestFocus()
+                return@setOnClickListener
+            }
+
+            if(password.isNullOrBlank())
+            {
+                binding.editTextPasswordLOG.error = "Password required"
+                binding.editTextPasswordLOG.requestFocus()
+                return@setOnClickListener
+            }
+
+            //Login()
+            // register aj apikey dat ako konstanty, hashovat heslo
+            databaseViewModel.login(ApiConstants.LOGIN_CONST,ApiConstants.API_KEY)
+            //view.findNavController().navigate(R.id.action_titleFragment_to_cameraFragment)
+
+            view.findNavController().navigate(R.id.action_titleFragment_to_videoViewerFragment)
         }
 
         binding.textViewLOG.setOnClickListener{

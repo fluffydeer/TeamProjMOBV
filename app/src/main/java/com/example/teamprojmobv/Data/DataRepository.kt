@@ -71,6 +71,41 @@ class DataRepository private constructor(
         }
     }
 
+    suspend fun loginUser(
+        action: String,
+        apikey: String,
+        username: String,
+        password: String
+    ) {
+
+        try {
+            val jsonObject = JSONObject()
+            jsonObject.put("action", action)
+            jsonObject.put("apikey", apikey)
+            jsonObject.put("username", username)
+            jsonObject.put("password", password)
+            val jsonObjectString = jsonObject.toString()
+            // Create RequestBody ( We're not using any converter, like GsonConverter, MoshiConverter e.t.c, that's why we use RequestBody )
+            val requestBody = jsonObjectString.toRequestBody("application/json".toMediaTypeOrNull())
+
+            val response = api.loginUser(requestBody)
+            if (response.isSuccessful) {
+                response.body()?.let {
+
+                    return cache.insertUser(
+                        UserItem(it.id, it.username, it.email, it.token, it.refresh, it.profile)
+                    )
+                }
+            }
+        } catch (ex: ConnectException) {
+            ex.printStackTrace()
+            return
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            return
+        }
+    }
+
 
 }
 

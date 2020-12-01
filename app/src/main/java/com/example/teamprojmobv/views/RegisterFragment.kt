@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
+import com.example.teamprojmobv.Data.ApiConstants
 import com.example.teamprojmobv.R
 import com.example.teamprojmobv.databinding.FragmentRegisterBinding
 import com.example.teamprojmobv.views.viewModels.DatabaseViewModel
@@ -37,11 +39,40 @@ class RegisterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
             binding.buttonRegisterREG.setOnClickListener {
-                // register aj apikey dat ako konstanty, hashovat heslo
-                var mail = databaseViewModel.email.value
-                databaseViewModel.register("register","yS9zD3dI4uR2aK0cY9cS5pT6tK2rZ6")
+                val username = databaseViewModel.username.value
+                val email = databaseViewModel.password.value
+                val password = databaseViewModel.password.value
+
+                if(email.isNullOrBlank())
+                {
+                    binding.editEmailREG.error = "Email required"
+                    binding.editEmailREG.requestFocus()
+                    return@setOnClickListener
+                }
+
+                if(username.isNullOrBlank())
+                {
+                    binding.editUserNameREG.error = "Username required"
+                    binding.editUserNameREG.requestFocus()
+                    return@setOnClickListener
+                }
+
+                if(password.isNullOrBlank())
+                {
+                    binding.editTextPasswordREG.error = "Password required"
+                    binding.editTextPasswordREG.requestFocus()
+                    return@setOnClickListener
+                }
+                
+                // hashovat heslo
+                databaseViewModel.register(ApiConstants.REG_CONST,ApiConstants.API_KEY)
             //view.findNavController().navigate(R.id.action_titleFragment_to_cameraFragment)
         }
+        binding.textViewLoginREG.setOnClickListener{
+            view.findNavController().navigate(R.id.action_registerFragment_to_titleFragment)
+        }
+
+
     }
 /*
     private fun Register() {

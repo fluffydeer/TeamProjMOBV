@@ -7,7 +7,7 @@ import kotlinx.coroutines.launch
 
 class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
     val email: MutableLiveData<String> = MutableLiveData()
-    val welcome = Transformations.map(email) { w -> "Slovo je: $w" }
+    //val welcome = Transformations.map(email) { w -> "Slovo je: $w" }
     val username: MutableLiveData<String> = MutableLiveData()
     val password: MutableLiveData<String> = MutableLiveData()
 
@@ -15,10 +15,16 @@ class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
     //fun register(action: String, apikey: String, email:String, username:String, password:String) {
     fun register(action: String, apikey: String) {
         viewModelScope.launch {
-            val value = email.value
             repository.createUser(action, apikey, (email.value!!), (username.value!!), (password.value!!))
         }
     }
+
+    fun login(action: String, apikey: String) {
+        viewModelScope.launch {
+            repository.loginUser(action, apikey, (username.value!!), (password.value!!))
+        }
+    }
+
     /*
     val input: MutableLiveData<String> = MutableLiveData()
 

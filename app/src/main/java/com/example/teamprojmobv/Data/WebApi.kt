@@ -20,7 +20,8 @@ interface WebApi {
 
     // Raw JSON
     @POST("/mobv/service.php")
-    suspend fun loginUser(@Body requestBody: RequestBody): Response<ResponseBody>
+    suspend fun loginUser(@Body requestBody: RequestBody): Response<UserItem>
+
     //@GET("realestate")
     //suspend fun getProperties(): Response<List<MarsResponse>>
 

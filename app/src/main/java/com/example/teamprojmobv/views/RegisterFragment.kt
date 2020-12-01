@@ -65,7 +65,7 @@ class RegisterFragment : Fragment() {
                 }
                 // hashovat heslo
                 databaseViewModel.register(ApiConstants.REG_CONST,ApiConstants.API_KEY)
-            //view.findNavController().navigate(R.id.action_titleFragment_to_cameraFragment)
+            view.findNavController().navigate(R.id.action_registerFragment_to_videoViewerFragment)
         }
         binding.textViewLoginREG.setOnClickListener{
             view.findNavController().navigate(R.id.action_registerFragment_to_titleFragment)

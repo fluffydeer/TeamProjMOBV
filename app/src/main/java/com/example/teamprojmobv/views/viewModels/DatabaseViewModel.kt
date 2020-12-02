@@ -10,19 +10,21 @@ import com.example.viewmodel.data.db.model.UserItem
 import kotlinx.coroutines.launch
 
 class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
+    // mutable kvoli errom ak napriklad nevyplni
     val email: MutableLiveData<String> = MutableLiveData()
-    //val welcome = Transformations.map(email) { w -> "Slovo je: $w" }
     val username: MutableLiveData<String> = MutableLiveData()
     val password: MutableLiveData<String> = MutableLiveData()
 
 
-    val actualUsers: LiveData<List<UserItem>>
-        get() = repository.getActualUsers()
+    /*val actualUsers: LiveData<List<UserItem>>
+        get() = repository.getActualUsers()*/
 
-    val text: LiveData<String> = Transformations.map(actualUsers) { it.toString() }
-    val loggedUser: LiveData<UserItem> = Transformations.map(actualUsers) { it[0] }
+    val actualUser: LiveData<UserItem>
+        get() = repository.getActualUser()
 
-    //fun register(action: String, apikey: String, email:String, username:String, password:String) {
+    //val text: LiveData<String> = Transformations.map(actualUser) { it.toString() }
+    //val loggedUser: LiveData<UserItem> = Transformations.map(actualUsers) { it.first() }
+
     fun register() {
         viewModelScope.launch {
             if(repository.existsUser(ApiConstants.EXISTS_CONST,ApiConstants.API_KEY, (username.value!!)))
@@ -38,24 +40,10 @@ class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
         }
     }
 
+    // ako logout??
     fun deleteUsers() {
         viewModelScope.launch {
             repository.deleteUsers()
         }
     }
-    /*
-    val input: MutableLiveData<String> = MutableLiveData()
-
-    val text: LiveData<String> = Transformations.map(repository.getWords()) { it.toString() }
-
-    fun insertWord() {
-        input.value?.let {
-            if (it.isNotEmpty()) {
-                viewModelScope.launch {
-                    repository.insertWord(WordItem(it))
-                    input.postValue("")
-                }
-            }
-        }
-    }*/
 }

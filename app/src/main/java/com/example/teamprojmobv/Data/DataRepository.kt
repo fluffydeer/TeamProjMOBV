@@ -33,6 +33,7 @@ class DataRepository private constructor(
     }
 
      fun getActualUsers(): LiveData<List<UserItem>> = cache.getActualUsers()
+    fun getActualUser(): LiveData<UserItem> = cache.getActualUser()
 
     fun deleteUsers() = cache.deleteUsers()
 

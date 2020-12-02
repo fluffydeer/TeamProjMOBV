@@ -66,10 +66,13 @@ class RegisterFragment : Fragment() {
                 // hashovat heslo
 
                 databaseViewModel.register()
-                /*
-                if(databaseViewModel.actualUser.value != null)
-                    view.findNavController().navigate(R.id.action_registerFragment_to_videoViewerFragment)*/
 
+                databaseViewModel.actualUser.observe(viewLifecycleOwner)
+                { (if (it.username != null) {
+                    view.findNavController().navigate(R.id.action_registerFragment_to_videoViewerFragment)
+                }
+                        )
+                }
         }
         binding.textViewLoginREG.setOnClickListener{
             view.findNavController().navigate(R.id.action_registerFragment_to_titleFragment)

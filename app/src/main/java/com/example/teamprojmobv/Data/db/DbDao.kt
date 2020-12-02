@@ -16,6 +16,9 @@ interface DbDao {
     @Query("SELECT * FROM users ORDER BY timestamp LIMIT 1")
     fun getActualUsers(): LiveData<List<UserItem>>
 
+    @Query("SELECT * FROM users ORDER BY timestamp LIMIT 1")
+    fun getActualUser(): LiveData<UserItem>
+
    /* @Update
     suspend fun updateUser(userItem: UserItem)
 

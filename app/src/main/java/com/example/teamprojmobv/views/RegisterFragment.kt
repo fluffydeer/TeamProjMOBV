@@ -43,7 +43,7 @@ class RegisterFragment : Fragment() {
                 val email = databaseViewModel.password.value
                 val password = databaseViewModel.password.value
 
-                if(email.isNullOrBlank())
+                if(email.isNullOrBlank() || android.util.Patterns.EMAIL_ADDRESS.matcher(password).matches())
                 {
                     binding.editEmailREG.error = "Email required"
                     binding.editEmailREG.requestFocus()
@@ -64,8 +64,12 @@ class RegisterFragment : Fragment() {
                     return@setOnClickListener
                 }
                 // hashovat heslo
-                databaseViewModel.register(ApiConstants.REG_CONST,ApiConstants.API_KEY)
-            view.findNavController().navigate(R.id.action_registerFragment_to_videoViewerFragment)
+
+                databaseViewModel.register()
+                /*
+                if(databaseViewModel.actualUser.value != null)
+                    view.findNavController().navigate(R.id.action_registerFragment_to_videoViewerFragment)*/
+
         }
         binding.textViewLoginREG.setOnClickListener{
             view.findNavController().navigate(R.id.action_registerFragment_to_titleFragment)

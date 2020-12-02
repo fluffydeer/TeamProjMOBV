@@ -10,9 +10,10 @@ data class UserItem(@PrimaryKey val id: Int,
                     val email: String,
                     val token: String,
                     val refresh: String,
-                    val profile: String) {
+                    val profile: String,
+                    val timestamp: Long
+) {
     override fun toString(): String {
-        return "UserItem(id=$id, username='$username', email='$email', token='$token', refresh='$refresh', profile='$profile')"
+        return "UserItem(id=$id, username='$username', email='$email', token='$token', refresh='$refresh', profile='$profile', timestamp=$timestamp)"
     }
-
 }

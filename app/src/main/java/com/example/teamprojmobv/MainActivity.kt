@@ -1,18 +1,23 @@
 package com.example.teamprojmobv
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.lifecycle.ViewModelProvider
+import com.example.teamprojmobv.views.viewModels.DatabaseViewModel
+import com.opinyour.android.app.data.utils.Injection
+import java.lang.RuntimeException
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        throw RuntimeException("Test crash")
     }
-
 
 
     companion object {

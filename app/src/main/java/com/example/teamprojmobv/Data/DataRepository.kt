@@ -11,6 +11,7 @@ import org.json.JSONObject
 import java.net.ConnectException
 
 
+
 /**
  * Repository class that works with local and remote data sources.
  */
@@ -31,8 +32,9 @@ class DataRepository private constructor(
             }
     }
 
-     fun getActualUser(): LiveData<UserItem> = cache.getActualUser()
+     fun getActualUsers(): LiveData<List<UserItem>> = cache.getActualUsers()
 
+    fun deleteUsers() = cache.deleteUsers()
 
     suspend fun createUser(
         action: String,
@@ -56,11 +58,18 @@ class DataRepository private constructor(
             val response = api.createUser(requestBody)
             if (response.isSuccessful) {
                 response.body()?.let {
-
-                    //cache.deleteUsers()
+                    val currentTimestamp = System.currentTimeMillis()
                     return cache.insertUser(
-                        UserItem(it.id, it.username, it.email, it.token, it.refresh, it.profile)
+                        UserItem(
+                            it.id,
+                            it.username,
+                            it.email,
+                            it.token,
+                            it.refresh,
+                            it.profile,
+                            currentTimestamp
                         )
+                    )
                     }
                 }
         } catch (ex: ConnectException) {
@@ -93,10 +102,12 @@ class DataRepository private constructor(
             val response = api.loginUser(requestBody)
             if (response.isSuccessful) {
                 response.body()?.let {
-                    //cache.deleteUsers()
-                    return cache.insertUser(
-                        UserItem(it.id, it.username, it.email, it.token, it.refresh, it.profile)
-                    )
+                     //cache.deleteUsers()
+                    val currentTimestamp = System.currentTimeMillis()
+                     cache.insertUser(
+                         UserItem(it.id, it.username, it.email, it.token, it.refresh, it.profile, currentTimestamp)
+                     )
+                    return
                 }
             }
         } catch (ex: ConnectException) {
@@ -108,6 +119,28 @@ class DataRepository private constructor(
         }
     }
 
+    suspend fun existsUser(existsConst: String, apiKey: String, value: String): Boolean {
+        try {
+            val jsonObject = JSONObject()
+            jsonObject.put("action", existsConst)
+            jsonObject.put("apikey", apiKey)
+            jsonObject.put("username", value)
+            val jsonObjectString = jsonObject.toString()
+            // Create RequestBody ( We're not using any converter, like GsonConverter, MoshiConverter e.t.c, that's why we use RequestBody )
+            val requestBody = jsonObjectString.toRequestBody("application/json".toMediaTypeOrNull())
+
+            val response = api.existsUser(requestBody)
+            return response
+
+        } catch (ex: ConnectException) {
+            ex.printStackTrace()
+            return true
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            return true
+        }
+
+    }
 
 }
 

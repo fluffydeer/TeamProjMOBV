@@ -10,7 +10,13 @@ interface DbDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertUser(userItem: UserItem)
 
-    @Update
+    @Query("DELETE FROM users")
+    fun deleteUsers()
+
+    @Query("SELECT * FROM users ORDER BY timestamp LIMIT 1")
+    fun getActualUsers(): LiveData<List<UserItem>>
+
+   /* @Update
     suspend fun updateUser(userItem: UserItem)
 
     @Delete
@@ -24,5 +30,5 @@ interface DbDao {
 
     @Query("SELECT * FROM users")
     fun getActualUser(): LiveData<UserItem>
-
+*/
 }

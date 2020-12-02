@@ -22,6 +22,9 @@ interface WebApi {
     @POST("/mobv/service.php")
     suspend fun loginUser(@Body requestBody: RequestBody): Response<UserItem>
 
+    @GET("/mobv/service.php")
+    suspend fun existsUser(@Body requestBody: RequestBody): Boolean
+
     //@GET("realestate")
     //suspend fun getProperties(): Response<List<MarsResponse>>
 

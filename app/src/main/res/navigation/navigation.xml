@@ -26,8 +26,8 @@
         android:name="com.example.teamprojmobv.views.CameraFragment"
         android:label="CameraFragment">
         <action
-            android:id="@+id/action_cameraFragment_to_videoViewerFragment"
-            app:destination="@id/videoViewerFragment" />
+            android:id="@+id/action_cameraFragment_to_videoUploadFragment"
+            app:destination="@id/videoUploadFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -59,6 +59,7 @@
             app:destination="@id/titleFragment" />
     </fragment>
     <fragment
+<<<<<<< Updated upstream
         android:id="@+id/registerFragment"
         android:name="com.example.teamprojmobv.views.RegisterFragment"
         android:label="fragment_register"
@@ -68,6 +69,20 @@
             app:destination="@id/titleFragment" />
         <action
             android:id="@+id/action_registerFragment_to_videoViewerFragment"
+=======
+        android:id="@+id/videoUploadFragment"
+        android:name="com.example.teamprojmobv.Views.VideoUploadFragment"
+        android:label="fragment_video_upload"
+        tools:layout="@layout/fragment_video_upload" >
+        <action
+            android:id="@+id/action_videoUploadFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_videoUploadFragment_to_cameraFragment2"
+            app:destination="@id/cameraFragment" />
+        <action
+            android:id="@+id/action_videoUploadFragment_to_videoViewerFragment"
+>>>>>>> Stashed changes
             app:destination="@id/videoViewerFragment" />
     </fragment>
 </navigation>

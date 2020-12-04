@@ -52,15 +52,25 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.graphics.drawable.toDrawable
 import androidx.lifecycle.Observer
+<<<<<<< Updated upstream:app/src/main/java/com/example/teamprojmobv/views/CameraFragment.kt
+=======
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
+>>>>>>> Stashed changes:app/src/main/java/com/example/teamprojmobv/Views/CameraFragment.kt
 
 import com.example.android.camera.utils.AutoFitSurfaceView
 import com.example.android.camera.utils.OrientationLiveData
 import com.example.android.camera.utils.getPreviewOutputSize
 import com.example.teamprojmobv.MainActivity
+<<<<<<< Updated upstream:app/src/main/java/com/example/teamprojmobv/views/CameraFragment.kt
 
 //import com.example.android.camera2.video.BuildConfig
 //import com.example.android.camera2.video.CameraActivity
 //import com.example.android.camera2.video.R
+=======
+//import com.example.teamprojmobv.my.BuildConfig
+>>>>>>> Stashed changes:app/src/main/java/com/example/teamprojmobv/Views/CameraFragment.kt
 
 @RequiresApi(Build.VERSION_CODES.M)
 class CameraFragment : Fragment() {
@@ -251,18 +261,18 @@ class CameraFragment : Fragment() {
     @SuppressLint("ClickableViewAccessibility")
     private fun initializeCamera() = lifecycleScope.launch(Dispatchers.Main) {
 
-        button_flip_camera.setOnClickListener {
-//            Log.d(TAG, "button_flip_camera.setOnClickListener")
-            if(idCamera == "0"){
-//                Log.d(TAG, "idCamera: 0 -> 1")
-                idCamera = "1"
-            }
-            else{
-//                Log.d(TAG, "idCamera: 1 -> 0")
-                idCamera = "0"
-            }
-
-        }
+//        button_flip_camera.setOnClickListener {
+////            Log.d(TAG, "button_flip_camera.setOnClickListener")
+//            if(idCamera == "0"){
+////                Log.d(TAG, "idCamera: 0 -> 1")
+//                idCamera = "1"
+//            }
+//            else{
+////                Log.d(TAG, "idCamera: 1 -> 0")
+//                idCamera = "0"
+//            }
+//
+//        }
 
         // Open the selected camera
 
@@ -328,6 +338,8 @@ class CameraFragment : Fragment() {
                     MediaScannerConnection.scanFile(
                         view.context, arrayOf(outputFile.absolutePath), null, null)
 
+                    MainActivity.recVideoPath = outputFile.absolutePath
+
 
 //                    // Launch external activity via intent to play video recorded using our provider
 //                    startActivity(Intent().apply {
@@ -343,6 +355,7 @@ class CameraFragment : Fragment() {
                     // Finishes our current camera screen
                     delay(MainActivity.ANIMATION_SLOW_MILLIS)
 //                    navController.popBackStack()
+                    view.findNavController().navigate(R.id.action_cameraFragment_to_videoUploadFragment)
                 }
             }
 

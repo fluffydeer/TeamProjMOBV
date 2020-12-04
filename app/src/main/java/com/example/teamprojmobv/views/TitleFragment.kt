@@ -63,10 +63,13 @@ class TitleFragment : Fragment() {
             databaseViewModel.login()
 
             databaseViewModel.actualUser.observe(viewLifecycleOwner)
-            { (if (it.username != null) {
-                view.findNavController().navigate(R.id.action_titleFragment_to_videoViewerFragment)
+            {
+                if (it != null) {
+                    if (it.username != null) {
+                        view.findNavController()
+                            .navigate(R.id.action_titleFragment_to_videoViewerFragment)
                     }
-                )
+                }
             }
         }
 

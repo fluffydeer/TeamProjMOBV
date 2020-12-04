@@ -68,10 +68,11 @@ class RegisterFragment : Fragment() {
                 databaseViewModel.register()
 
                 databaseViewModel.actualUser.observe(viewLifecycleOwner)
-                { (if (it.username != null) {
-                    view.findNavController().navigate(R.id.action_registerFragment_to_videoViewerFragment)
+                { if (it != null) {
+                    if (it.username != null) {
+                        view.findNavController().navigate(R.id.action_registerFragment_to_videoViewerFragment)
+                    }
                 }
-                        )
                 }
         }
         binding.textViewLoginREG.setOnClickListener{

@@ -52,25 +52,20 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.graphics.drawable.toDrawable
 import androidx.lifecycle.Observer
-<<<<<<< Updated upstream:app/src/main/java/com/example/teamprojmobv/views/CameraFragment.kt
-=======
+
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
->>>>>>> Stashed changes:app/src/main/java/com/example/teamprojmobv/Views/CameraFragment.kt
 
 import com.example.android.camera.utils.AutoFitSurfaceView
 import com.example.android.camera.utils.OrientationLiveData
 import com.example.android.camera.utils.getPreviewOutputSize
 import com.example.teamprojmobv.MainActivity
-<<<<<<< Updated upstream:app/src/main/java/com/example/teamprojmobv/views/CameraFragment.kt
 
 //import com.example.android.camera2.video.BuildConfig
 //import com.example.android.camera2.video.CameraActivity
 //import com.example.android.camera2.video.R
-=======
 //import com.example.teamprojmobv.my.BuildConfig
->>>>>>> Stashed changes:app/src/main/java/com/example/teamprojmobv/Views/CameraFragment.kt
 
 @RequiresApi(Build.VERSION_CODES.M)
 class CameraFragment : Fragment() {

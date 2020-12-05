@@ -4,17 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import com.example.teamprojmobv.Data.ApiConstants
 import com.example.teamprojmobv.R
 import com.example.teamprojmobv.databinding.FragmentRegisterBinding
 import com.example.teamprojmobv.views.viewModels.DatabaseViewModel
-import com.opinyour.android.app.data.utils.Injection
+import com.example.teamprojmobv.Data.util.Injection
 
 class RegisterFragment : Fragment() {
     //private val homeViewModel: HomeViewModel by viewModels()
@@ -67,12 +66,21 @@ class RegisterFragment : Fragment() {
 
                 databaseViewModel.register()
 
-                databaseViewModel.actualUser.observe(viewLifecycleOwner)
-                { if (it != null) {
-                    if (it.username != null) {
-                        view.findNavController().navigate(R.id.action_registerFragment_to_videoViewerFragment)
+                databaseViewModel.actualUser.observe(viewLifecycleOwner) {
+                    if (it != null) {
+                        if (!it.username.isNullOrEmpty()) {
+                            view.findNavController().navigate(R.id.action_registerFragment_to_videoViewerFragment)
+                        } else {
+                            Toast.makeText(
+                                getActivity(),
+                                "Incorrect register data!",
+                                Toast.LENGTH_SHORT
+                            ).show();
+                        }
+                    } else {
+                        Toast.makeText(getActivity(), "Incorrect register data!", Toast.LENGTH_SHORT)
+                            .show();
                     }
-                }
                 }
         }
         binding.textViewLoginREG.setOnClickListener{

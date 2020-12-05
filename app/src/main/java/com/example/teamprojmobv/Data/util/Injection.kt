@@ -1,9 +1,7 @@
-
-package com.opinyour.android.app.data.utils
+package com.example.teamprojmobv.Data.util
 
 import android.content.Context
 import androidx.lifecycle.ViewModelProvider
-import com.example.teamprojmobv.Data.util.ViewModelFactory
 import com.example.teamprojmobv.Data.DataRepository
 import com.example.teamprojmobv.Data.db.AppRoomDatabase
 import com.example.teamprojmobv.Data.db.LocalCache

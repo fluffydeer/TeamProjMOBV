@@ -4,18 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import com.example.teamprojmobv.Data.ApiConstants
-import com.example.teamprojmobv.MainActivity
 import com.example.teamprojmobv.R
 import com.example.teamprojmobv.databinding.FragmentTitleBinding
 import com.example.teamprojmobv.views.viewModels.DatabaseViewModel
-import com.opinyour.android.app.data.utils.Injection
-import kotlinx.coroutines.delay
-import java.util.concurrent.Delayed
+import com.example.teamprojmobv.Data.util.Injection
 
 
 class TitleFragment : Fragment() {
@@ -62,13 +59,21 @@ class TitleFragment : Fragment() {
             // register aj apikey dat ako konstanty, hashovat heslo
             databaseViewModel.login()
 
+
+
             databaseViewModel.actualUser.observe(viewLifecycleOwner)
             {
                 if (it != null) {
-                    if (it.username != null) {
+                    if (!it.username.isNullOrEmpty()) {
                         view.findNavController()
                             .navigate(R.id.action_titleFragment_to_videoViewerFragment)
                     }
+                    else{
+                        Toast.makeText(getActivity(),"Incorrect login data!",Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else{
+                    Toast.makeText(getActivity(),"Incorrect login data!",Toast.LENGTH_SHORT).show();
                 }
             }
         }

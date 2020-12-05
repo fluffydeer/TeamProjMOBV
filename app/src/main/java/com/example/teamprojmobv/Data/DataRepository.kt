@@ -3,6 +3,7 @@ package com.example.teamprojmobv.Data
 
 import androidx.lifecycle.LiveData
 import com.example.teamprojmobv.Data.db.LocalCache
+import com.example.teamprojmobv.Data.util.ChCrypto
 import com.example.viewmodel.data.db.model.UserItem
 import com.opinyour.android.app.data.api.WebApi
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -51,7 +52,9 @@ class DataRepository private constructor(
             jsonObject.put("apikey", apikey)
             jsonObject.put("email", email)
             jsonObject.put("username", username)
-            jsonObject.put("password", password)
+            // password zadava pouzivatel, SYM_ENC_KEY je 32 char string
+            val passwordEnc = ChCrypto.aesEncrypt(password, ApiConstants.SYM_ENC_KEY)
+            jsonObject.put("password", passwordEnc)
             val jsonObjectString = jsonObject.toString()
             // Create RequestBody ( We're not using any converter, like GsonConverter, MoshiConverter e.t.c, that's why we use RequestBody )
             val requestBody = jsonObjectString.toRequestBody("application/json".toMediaTypeOrNull())
@@ -95,7 +98,8 @@ class DataRepository private constructor(
             jsonObject.put("action", action)
             jsonObject.put("apikey", apikey)
             jsonObject.put("username", username)
-            jsonObject.put("password", password)
+            val passwordEnc = ChCrypto.aesEncrypt(password, ApiConstants.SYM_ENC_KEY)
+            jsonObject.put("password", passwordEnc)
             val jsonObjectString = jsonObject.toString()
             // Create RequestBody ( We're not using any converter, like GsonConverter, MoshiConverter e.t.c, that's why we use RequestBody )
             val requestBody = jsonObjectString.toRequestBody("application/json".toMediaTypeOrNull())

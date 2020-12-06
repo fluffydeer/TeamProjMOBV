@@ -1,14 +1,19 @@
 
 package com.example.teamprojmobv.Data
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.teamprojmobv.Data.db.LocalCache
 import com.example.teamprojmobv.Data.util.ChCrypto
 import com.example.viewmodel.data.db.model.UserItem
 import com.opinyour.android.app.data.api.WebApi
+import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
+import java.io.File
 import java.net.ConnectException
 
 
@@ -20,6 +25,7 @@ class DataRepository private constructor(
     private val api: WebApi,
     private val cache: LocalCache
 ) {
+    private lateinit var token: String
 
     companion object {
         const val TAG = "DataRepository"
@@ -147,6 +153,44 @@ class DataRepository private constructor(
             return true
         }
 
+    }
+
+    suspend fun uploadVideo(
+        filePath: String,
+        apikey: String,
+    ) {
+        try {
+            val file = File(filePath)
+
+            val jsonData = JSONObject()
+
+            //token = logged
+            jsonData.put("apikey", apikey)
+            jsonData.put("token", token)
+            val jsonDataString = jsonData.toString()
+//            val json= RequestBody.create(MediaType.parse("application/json"), jsonDataString)
+//            val video = RequestBody.create(MediaType.parse("video/*"), file)
+//            val filePart =
+//                MultipartBody.Part.createFormData("video", "video" ,video)
+//
+//            val responseVideo = api.createVideo(filePart, json)
+//
+//            Log.i("DataRepository upload", responseVideo.toString())
+//            Log.i("DataRepository upload", responseVideo.body().toString())
+//            if (responseVideo.isSuccessful) {
+//                responseVideo.body()?.let {
+//                    Log.i("DataRepository upload", it.string())
+//                    return
+//                }
+//            }
+        } catch (ex: ConnectException) {
+            ex.printStackTrace()
+            return
+        } catch (ex: Exception) {
+            Log.e("DataRepository upload", ex.toString())
+            ex.printStackTrace()
+            return
+        }
     }
 
 }

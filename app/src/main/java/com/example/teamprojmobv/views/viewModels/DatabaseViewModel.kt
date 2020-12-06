@@ -49,4 +49,10 @@ class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
             repository.deleteUsers()
         }
     }
+
+    fun addUserVideo(filePath: String, apikey: String) {
+        viewModelScope.launch {
+            repository.uploadVideo(filePath, apikey)
+        }
+    }
 }

@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.example.teamprojmobv.MainActivity
 import com.example.teamprojmobv.R
+import com.example.teamprojmobv.views.viewModels.DatabaseViewModel
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.util.Util
@@ -20,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_video_viewer.player_view
 
 
 class VideoUploadFragment : Fragment() {
-
+    private lateinit var databaseViewModel: DatabaseViewModel
     private var mPlayer : SimpleExoPlayer? = null
     private var playWhenReady = true
     private var currentWindow = 0
@@ -45,11 +46,15 @@ class VideoUploadFragment : Fragment() {
 
         button_upload.setOnClickListener {
 
+
+
             /*
             * TODO: doplnit upload videa na server
             * cesta k videu je ulozena tu: MainActivity.recVideoPath
             *
             * */
+
+            databaseViewModel.addUserVideo(MainActivity.recVideoPath, "yS9zD3dI4uR2aK0cY9cS5pT6tK2rZ6")
 
             view.findNavController().navigate(R.id.action_videoUploadFragment_to_videoViewerFragment)
         }

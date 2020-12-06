@@ -2,17 +2,24 @@ package com.opinyour.android.app.data.api
 
 import android.content.Context
 import com.example.viewmodel.data.db.model.UserItem
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface WebApi {
+
+
+    @Multipart
+    @POST("/mobv/upload.php")
+    suspend fun createVideo(
+        @Part image: MultipartBody.Part,
+        @Part("data") video_json: RequestBody
+    ): Response<ResponseBody>
 
     // Raw JSON
     @POST("/mobv/service.php")

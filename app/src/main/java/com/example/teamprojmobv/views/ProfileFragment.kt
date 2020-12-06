@@ -11,13 +11,15 @@ import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.example.teamprojmobv.Data.util.Injection
 import com.example.teamprojmobv.R
+import com.example.teamprojmobv.views.viewModels.DatabaseViewModel
 import kotlinx.android.synthetic.main.fragment_profile.*
 
 
 class ProfileFragment : Fragment() {
-    lateinit var imageView: ImageView
-    lateinit var button: Button
+    private lateinit var databaseViewModel: DatabaseViewModel
     private val pickImage = 100
     private var imageUri: Uri? = null
 
@@ -25,8 +27,12 @@ class ProfileFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
 
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+        databaseViewModel = ViewModelProvider(
+            this,
+            Injection.provideViewModelFactory(requireContext())
+        ).get(DatabaseViewModel::class.java)
 
+        return inflater.inflate(R.layout.fragment_profile, container, false)
     }
 
     //todo toto vsetko treba hodit do viemodelu ci?
@@ -43,7 +49,12 @@ class ProfileFragment : Fragment() {
             startActivityForResult(gallery, pickImage)
         }
 
+        buttonChangePwd.setOnClickListener{
+            databaseViewModel.changePassword()
+        }
     }
+
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 

@@ -69,6 +69,7 @@ class DataRepository private constructor(
             if (response.isSuccessful) {
                 response.body()?.let {
                     val currentTimestamp = System.currentTimeMillis()
+                    token = it.token
                     cache.insertUser(
                         UserItem(
                             it.id,
@@ -116,6 +117,7 @@ class DataRepository private constructor(
                 response.body()?.let {
                      //cache.deleteUsers()
                     val currentTimestamp = System.currentTimeMillis()
+                    token = it.token
                      cache.insertUser(
                          UserItem(it.id, it.username, it.email, it.token, it.refresh, it.profile, currentTimestamp)
                      )
@@ -188,6 +190,44 @@ class DataRepository private constructor(
             return
         } catch (ex: Exception) {
             Log.e("DataRepository upload", ex.toString())
+            ex.printStackTrace()
+            return
+        }
+    }
+
+
+
+    suspend fun changePassword(
+        action: String,
+        apikey: String,
+        //tu si posielat heslo
+    ) {
+        try {
+            val jsonObject = JSONObject()
+            jsonObject.put("action", action)
+            jsonObject.put("apikey", apikey)
+            jsonObject.put("token", token)
+            //val passwordEnc = ChCrypto.aesEncrypt("k", ApiConstants.SYM_ENC_KEY)
+            jsonObject.put("oldpassword", ChCrypto.aesEncrypt("test", ApiConstants.SYM_ENC_KEY))
+            jsonObject.put("newpassword", ChCrypto.aesEncrypt("naty", ApiConstants.SYM_ENC_KEY))
+
+            val jsonObjectString = jsonObject.toString()
+            val requestBody=
+                jsonObjectString.toRequestBody("application/json".toMediaTypeOrNull())
+            val response = api.changePassword(requestBody)
+
+            Log.i("changepassword", response.toString())  //{protocol=http/1.1, code=200, message=OK... vratilo request
+
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    Log.i("changepassword", it.string())   //toto funguje
+                    return
+                }
+            }
+        } catch (ex: ConnectException) {
+            ex.printStackTrace()
+            return
+        } catch (ex: Exception) {
             ex.printStackTrace()
             return
         }

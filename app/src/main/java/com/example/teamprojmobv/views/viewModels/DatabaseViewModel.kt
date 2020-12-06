@@ -55,4 +55,10 @@ class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
             repository.uploadVideo(filePath, apikey)
         }
     }
+
+    fun changePassword(){
+        viewModelScope.launch {
+            repository.changePassword("password", "yS9zD3dI4uR2aK0cY9cS5pT6tK2rZ6")
+        }
+    }
 }

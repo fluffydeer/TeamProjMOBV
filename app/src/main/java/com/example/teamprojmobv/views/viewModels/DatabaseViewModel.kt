@@ -59,18 +59,19 @@ class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
     }
 
     fun changePassword(pwd : String):Boolean{
+        //runBlocking - caka to na return premennu z korutiny
         val result = runBlocking {
             repository.changePassword("password", "yS9zD3dI4uR2aK0cY9cS5pT6tK2rZ6", pwd)
         }
-        Log.i("dbviewmodel", result.toString())
         return result
-        /*viewModelScope.launch {
-            repository.changePassword("password", "yS9zD3dI4uR2aK0cY9cS5pT6tK2rZ6", pwd)
-        }*/
     }
 
     fun getLoggedUser() : LiveData<UserItem>{
         return repository.getActualUser()
+    }
+
+    fun getUserInfo(): UserItem {
+        return repository.getLoggedUser()
     }
 
     fun getPassword():String{

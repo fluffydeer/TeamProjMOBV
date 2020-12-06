@@ -10,16 +10,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.teamprojmobv.Data.util.Injection
 import com.example.teamprojmobv.R
+import com.example.teamprojmobv.databinding.FragmentProfileBinding
 import com.example.teamprojmobv.views.viewModels.DatabaseViewModel
 import kotlinx.android.synthetic.main.fragment_profile.*
 
 
 class ProfileFragment : Fragment() {
     private lateinit var databaseViewModel: DatabaseViewModel
+    private lateinit var binding: FragmentProfileBinding
+    private var selectedImageUri: Uri? = null
     private val pickImage = 100
     private var imageUri: Uri? = null
 
@@ -27,18 +31,25 @@ class ProfileFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
+        binding = DataBindingUtil.inflate(
+            inflater, R.layout.fragment_profile, container, false
+        )
 
         databaseViewModel = ViewModelProvider(
             this,
             Injection.provideViewModelFactory(requireContext())
         ).get(DatabaseViewModel::class.java)
 
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+        return binding.root
     }
 
     //todo toto vsetko treba hodit do viemodelu ci?
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val userInfo = databaseViewModel.getUserInfo()
+        binding.nickname = userInfo.username
+        binding.mail = userInfo.email
 
         profileImage.setOnClickListener{
             val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)

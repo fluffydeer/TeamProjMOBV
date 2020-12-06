@@ -25,9 +25,10 @@ class DataRepository private constructor(
     private val api: WebApi,
     private val cache: LocalCache
 ) {
+
     private lateinit var token: String
     private lateinit var pwd: String
-
+    private lateinit var loggedUser : UserItem
 
     companion object {
         const val TAG = "DataRepository"
@@ -41,10 +42,15 @@ class DataRepository private constructor(
             }
     }
 
-     fun getActualUsers(): LiveData<List<UserItem>> = cache.getActualUsers()
+    fun getActualUsers(): LiveData<List<UserItem>> = cache.getActualUsers()
     fun getActualUser(): LiveData<UserItem> = cache.getActualUser()
     fun deleteUsers() = cache.deleteUsers()
     fun getPassword():String = pwd
+
+    //tu by som asi mala tahat prihlaseneho uzivatela z cache vsak na co to mame
+    fun getLoggedUser():UserItem{
+        return loggedUser
+    }
 
     suspend fun createUser(
         action: String,
@@ -71,6 +77,7 @@ class DataRepository private constructor(
             if (response.isSuccessful) {
                 response.body()?.let {
                     val currentTimestamp = System.currentTimeMillis()
+                    loggedUser = UserItem(it.id, it.username, it.email, it.token, it.refresh, it.profile, currentTimestamp)
                     token = it.token
                     pwd = password
                     Log.i("DataRepository", token + " " + pwd)
@@ -123,11 +130,11 @@ class DataRepository private constructor(
                     val currentTimestamp = System.currentTimeMillis()
                     token = it.token
                     pwd = password
-                    Log.i("DataRepository", token + " " + pwd)
-
+                    loggedUser = UserItem(it.id, it.username, it.email, it.token, it.refresh, it.profile, currentTimestamp)
                     cache.insertUser(
                          UserItem(it.id, it.username, it.email, it.token, it.refresh, it.profile, currentTimestamp)
                      )
+                    Log.i("DataRepository", token + " " + pwd)
                     return true
                 }
             }
@@ -226,17 +233,16 @@ class DataRepository private constructor(
             if (response.isSuccessful) {
                 response.body()?.let {
                     Log.i("changepassword", "old: " + pwd + " new: " + newPwd)
-
                     pwd = newPwd
                     token = it.token
                     val currentTimestamp = System.currentTimeMillis()
                     // TODO bohvie ci toto funguje
                     // cache.deleteUsers()   //nejde lebo java.lang.IllegalStateException: Cannot access
                     // database on the main thread since it may potentially lock the UI for a long period of time.
+                    loggedUser = UserItem(it.id, it.username, it.email, it.token, it.refresh, it.profile, currentTimestamp)
                     cache.insertUser(
                         UserItem(it.id, it.username, it.email, it.token, it.refresh, it.profile, currentTimestamp)
                     )
-                    //Log.i("changepassword", it.string())   //toto funguje na Response<RequestBody>
                     return true
                 }
             }
@@ -249,6 +255,5 @@ class DataRepository private constructor(
             return false
         }
     }
-
 }
 

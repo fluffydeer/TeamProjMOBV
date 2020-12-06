@@ -1,6 +1,7 @@
 package com.example.teamprojmobv.views.viewModels
 
 
+import android.util.Log
 import androidx.lifecycle.*
 import androidx.navigation.findNavController
 import com.example.teamprojmobv.Data.ApiConstants
@@ -8,6 +9,7 @@ import com.example.teamprojmobv.Data.DataRepository
 import com.example.teamprojmobv.R
 import com.example.viewmodel.data.db.model.UserItem
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
     // mutable kvoli errom ak napriklad nevyplni
@@ -19,7 +21,7 @@ class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
     /*val actualUsers: LiveData<List<UserItem>>
         get() = repository.getActualUsers()*/
 
-    val actualUser: LiveData<UserItem>
+    val getActualUser: LiveData<UserItem>
         get() = repository.getActualUser()
 
      val successRes :MutableLiveData<Boolean> = MutableLiveData<Boolean>()
@@ -56,9 +58,22 @@ class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
         }
     }
 
-    fun changePassword(){
-        viewModelScope.launch {
-            repository.changePassword("password", "yS9zD3dI4uR2aK0cY9cS5pT6tK2rZ6")
+    fun changePassword(pwd : String):Boolean{
+        val result = runBlocking {
+            repository.changePassword("password", "yS9zD3dI4uR2aK0cY9cS5pT6tK2rZ6", pwd)
         }
+        Log.i("dbviewmodel", result.toString())
+        return result
+        /*viewModelScope.launch {
+            repository.changePassword("password", "yS9zD3dI4uR2aK0cY9cS5pT6tK2rZ6", pwd)
+        }*/
+    }
+
+    fun getLoggedUser() : LiveData<UserItem>{
+        return repository.getActualUser()
+    }
+
+    fun getPassword():String{
+        return repository.getPassword()
     }
 }

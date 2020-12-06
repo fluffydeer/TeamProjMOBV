@@ -4,11 +4,11 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -22,6 +22,7 @@ class ProfileFragment : Fragment() {
     private lateinit var databaseViewModel: DatabaseViewModel
     private val pickImage = 100
     private var imageUri: Uri? = null
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -50,8 +51,60 @@ class ProfileFragment : Fragment() {
         }
 
         buttonChangePwd.setOnClickListener{
-            databaseViewModel.changePassword()
+            showChangePasswordViews()
         }
+
+        buttonSavePasswordChange.setOnClickListener{
+            //TODO tu by som mala spristupnovat local cache ale narychlo som to nevedela
+            val pwd = databaseViewModel.getPassword()
+            Log.i("ProfileFragemnt", pwd)
+
+            if(editTextOldPassword.text.toString() != pwd){
+                createToast("Incorrect old password")
+            }else if(editTextNewPassword.text.toString() == "" || editTextConfirmPassword.text.toString() == ""){
+                createToast("Fields cannot be empty")
+            } else if(editTextOldPassword.text.toString() == editTextNewPassword.text.toString()){
+                createToast("Old and new passwords are the same")
+            }else if(editTextNewPassword.text.toString() != editTextConfirmPassword.text.toString()){
+                createToast("Passwords are not the same")
+            } else{
+                if(databaseViewModel.changePassword(editTextNewPassword.text.toString())){
+                    createToast("Password changed successfully")
+                }else{
+                    createToast("Server is grumpy, your password was not changed")
+                }
+                hideChangePasswordViews()
+            }
+        }
+
+        buttonCancelPasswordChange.setOnClickListener{
+            hideChangePasswordViews()
+        }
+    }
+
+    fun createToast(text:String){
+        Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show()
+    }
+
+    fun hideChangePasswordViews(){
+        buttonChangePwd.visibility = View.VISIBLE
+        buttonCancelPasswordChange.visibility = View.GONE
+        buttonSavePasswordChange.visibility = View.GONE
+        editTextOldPassword.visibility = View.GONE
+        editTextNewPassword.visibility = View.GONE
+        editTextConfirmPassword.visibility = View.GONE
+        editTextNewPassword.text.clear()
+        editTextOldPassword.text.clear()
+        editTextConfirmPassword.text.clear()
+    }
+
+    fun showChangePasswordViews(){
+        buttonChangePwd.visibility = View.GONE
+        editTextOldPassword.visibility = View.VISIBLE
+        editTextNewPassword.visibility = View.VISIBLE
+        editTextConfirmPassword.visibility = View.VISIBLE
+        buttonSavePasswordChange.visibility = View.VISIBLE
+        buttonCancelPasswordChange.visibility = View.VISIBLE
     }
 
 

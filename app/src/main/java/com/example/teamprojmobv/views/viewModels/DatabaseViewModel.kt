@@ -30,7 +30,7 @@ class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
 
     fun register() {
         viewModelScope.launch {
-            if(repository.existsUser(ApiConstants.EXISTS_CONST,ApiConstants.API_KEY, (username.value!!)))
+            //if(!repository.existsUser(ApiConstants.EXISTS_CONST,ApiConstants.API_KEY, (username.value!!)))
                 successRes.value = repository.createUser(ApiConstants.REG_CONST,ApiConstants.API_KEY, (email.value!!), (username.value!!), (password.value!!))
         }
     }

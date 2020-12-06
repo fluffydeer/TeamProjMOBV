@@ -22,19 +22,22 @@ class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
     val actualUser: LiveData<UserItem>
         get() = repository.getActualUser()
 
+     val successRes :MutableLiveData<Boolean> = MutableLiveData<Boolean>()
+
+
     //val text: LiveData<String> = Transformations.map(actualUser) { it.toString() }
     //val loggedUser: LiveData<UserItem> = Transformations.map(actualUsers) { it.first() }
 
     fun register() {
         viewModelScope.launch {
             if(repository.existsUser(ApiConstants.EXISTS_CONST,ApiConstants.API_KEY, (username.value!!)))
-                repository.createUser(ApiConstants.REG_CONST,ApiConstants.API_KEY, (email.value!!), (username.value!!), (password.value!!))
+                successRes.value = repository.createUser(ApiConstants.REG_CONST,ApiConstants.API_KEY, (email.value!!), (username.value!!), (password.value!!))
         }
     }
 
     fun login() {
         viewModelScope.launch {
-            repository.loginUser(
+            successRes.value = repository.loginUser(
                 ApiConstants.LOGIN_CONST,
                 ApiConstants.API_KEY, (username.value!!), (password.value!!))
         }

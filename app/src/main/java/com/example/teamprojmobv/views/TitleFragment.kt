@@ -29,12 +29,27 @@ class TitleFragment : Fragment() {
             .get(DatabaseViewModel::class.java)
         binding.model = databaseViewModel
 
+
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        databaseViewModel.successRes.observe(viewLifecycleOwner)
+        {
+            it?.let {
+                if (it == true) {
+                    databaseViewModel.successRes.value = null
+                    view.findNavController()
+                        .navigate(R.id.action_titleFragment_to_videoViewerFragment)
+                    //databaseViewModel.successRes.removeObservers(viewLifecycleOwner);
+                } else {
+                    Toast.makeText(activity, "Incorrect login data!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
 
         binding.buttonLoginLOG.setOnClickListener {
 
@@ -59,23 +74,22 @@ class TitleFragment : Fragment() {
             // register aj apikey dat ako konstanty, hashovat heslo
             databaseViewModel.login()
 
+            /*databaseViewModel.successRes.observe(viewLifecycleOwner) {
+                it?.let {
+                    // Now foo is non-null
+                    if (it) {
 
-
-            databaseViewModel.actualUser.observe(viewLifecycleOwner)
-            {
-                if (it != null) {
-                    if (!it.username.isNullOrEmpty()) {
                         view.findNavController()
                             .navigate(R.id.action_titleFragment_to_videoViewerFragment)
-                    }
-                    else{
-                        Toast.makeText(getActivity(),"Incorrect login data!",Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getActivity(), "Incorrect login data!", Toast.LENGTH_SHORT)
+                            .show();
                     }
                 }
-                else{
-                    Toast.makeText(getActivity(),"Incorrect login data!",Toast.LENGTH_SHORT).show();
-                }
-            }
+            }*/
+
+
+
         }
 
         binding.textViewLOG.setOnClickListener{

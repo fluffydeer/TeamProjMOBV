@@ -44,7 +44,7 @@ class DataRepository private constructor(
         email: String,
         username: String,
         password: String
-    ) {
+    ):Boolean {
 
         try {
             val jsonObject = JSONObject()
@@ -63,7 +63,7 @@ class DataRepository private constructor(
             if (response.isSuccessful) {
                 response.body()?.let {
                     val currentTimestamp = System.currentTimeMillis()
-                    return cache.insertUser(
+                    cache.insertUser(
                         UserItem(
                             it.id,
                             it.username,
@@ -74,16 +74,18 @@ class DataRepository private constructor(
                             currentTimestamp
                         )
                     )
+                    return true
                     }
                 }
         } catch (ex: ConnectException) {
 
             ex.printStackTrace()
-            return
+            return false
         } catch (ex: Exception) {
             ex.printStackTrace()
-            return
+            return false
         }
+        return false
     }
 
     suspend fun loginUser(
@@ -91,8 +93,7 @@ class DataRepository private constructor(
         apikey: String,
         username: String,
         password: String
-    ) {
-
+    ): Boolean {
         try {
             val jsonObject = JSONObject()
             jsonObject.put("action", action)
@@ -112,16 +113,17 @@ class DataRepository private constructor(
                      cache.insertUser(
                          UserItem(it.id, it.username, it.email, it.token, it.refresh, it.profile, currentTimestamp)
                      )
-                    return
+                    return true
                 }
             }
         } catch (ex: ConnectException) {
             ex.printStackTrace()
-            return
+            return false
         } catch (ex: Exception) {
             ex.printStackTrace()
-            return
+            return false
         }
+        return false
     }
 
     suspend fun existsUser(existsConst: String, apiKey: String, value: String): Boolean {

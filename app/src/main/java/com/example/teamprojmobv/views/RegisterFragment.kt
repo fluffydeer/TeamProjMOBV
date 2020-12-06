@@ -1,6 +1,8 @@
 package com.example.teamprojmobv.views
 
 import android.os.Bundle
+import android.text.TextUtils
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,14 +39,32 @@ class RegisterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        databaseViewModel.successRes.observe(viewLifecycleOwner)
+        {
+            it?.let {
+                if (it == true) {
+                    databaseViewModel.successRes.value = null
+                    view.findNavController()
+                        .navigate(R.id.action_registerFragment_to_videoViewerFragment)
+                    //databaseViewModel.successRes.removeObservers(viewLifecycleOwner);
+                } else {
+                    Toast.makeText(getActivity(), "Incorrect register data or user exists!", Toast.LENGTH_SHORT)
+                        .show();
+                }
+            }
+        }
+
+
             binding.buttonRegisterREG.setOnClickListener {
                 val username = databaseViewModel.username.value
-                val email = databaseViewModel.password.value
+                val email = databaseViewModel.email.value
                 val password = databaseViewModel.password.value
 
-                if(email.isNullOrBlank() || android.util.Patterns.EMAIL_ADDRESS.matcher(password).matches())
+                if(TextUtils.isEmpty(email) || !Patterns.EMAIL_ADDRESS.matcher(email).matches())
+
+                // if(email.isNullOrBlank() || android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches())
                 {
-                    binding.editEmailREG.error = "Email required"
+                    binding.editEmailREG.error = "Valid email required"
                     binding.editEmailREG.requestFocus()
                     return@setOnClickListener
                 }
@@ -66,7 +86,8 @@ class RegisterFragment : Fragment() {
 
                 databaseViewModel.register()
 
-                databaseViewModel.actualUser.observe(viewLifecycleOwner) {
+
+                /*databaseViewModel.actualUser.observe(viewLifecycleOwner) {
                     if (it != null) {
                         if (!it.username.isNullOrEmpty()) {
                             view.findNavController().navigate(R.id.action_registerFragment_to_videoViewerFragment)
@@ -81,7 +102,7 @@ class RegisterFragment : Fragment() {
                         Toast.makeText(getActivity(), "Incorrect register data!", Toast.LENGTH_SHORT)
                             .show();
                     }
-                }
+                }*/
         }
         binding.textViewLoginREG.setOnClickListener{
             view.findNavController().navigate(R.id.action_registerFragment_to_titleFragment)

@@ -70,6 +70,7 @@ class ProfileFragment : Fragment() {
     }
 
     fun setUpProfileData(userInfo : UserItem){
+        //TODO tu by som mala spristupnovat local cache ale narychlo som to nevedela
         binding.nickname = userInfo.username
         binding.mail = userInfo.email
     }
@@ -99,6 +100,7 @@ class ProfileFragment : Fragment() {
 
     fun checkIfPasswordsAreInCorrectForm(){
         //TODO tu by som mala spristupnovat local cache ale narychlo som to nevedela
+        //na mysli mam databaseViewModel.getCurrentPassword()
         if(editTextOldPassword.text.toString() != databaseViewModel.getCurrentPassword()){
             createToast("Incorrect old password")
             editTextOldPassword.text.clear()

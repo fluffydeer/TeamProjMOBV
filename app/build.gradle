@@ -124,4 +124,7 @@ dependencies {
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
+
+    //for downloading pics from url
+    implementation 'com.squareup.picasso:picasso:2.71828'
 }

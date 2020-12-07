@@ -12,7 +12,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 
 interface WebApi {
-
+    @Multipart
+    @POST("/mobv/upload.php")
+    suspend fun createPhoto(
+        @Part image: MultipartBody.Part,
+        @Part("data") image_json: RequestBody
+    ): Response<ResponseBody>
 
     @Multipart
     @POST("/mobv/upload.php")

@@ -1,12 +1,9 @@
 package com.example.teamprojmobv.views.viewModels
 
 
-import android.util.Log
 import androidx.lifecycle.*
-import androidx.navigation.findNavController
 import com.example.teamprojmobv.Data.ApiConstants
 import com.example.teamprojmobv.Data.DataRepository
-import com.example.teamprojmobv.R
 import com.example.viewmodel.data.db.model.UserItem
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -61,7 +58,7 @@ class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
     fun changePassword(pwd : String):Boolean{
         //runBlocking - caka to na return premennu z korutiny
         val result = runBlocking {
-            repository.changePassword("password", "yS9zD3dI4uR2aK0cY9cS5pT6tK2rZ6", pwd)
+            repository.changePassword(ApiConstants.PWD_CONST, ApiConstants.API_KEY, pwd)
         }
         return result
     }
@@ -74,7 +71,13 @@ class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
         return repository.getLoggedUser()
     }
 
-    fun getPassword():String{
+    fun getCurrentPassword():String{
         return repository.getPassword()
+    }
+
+    fun loadUserPhoto(filePath: String) {
+        viewModelScope.launch {
+            repository.uploadProfilePhoto(filePath, ApiConstants.API_KEY)
+        }
     }
 }

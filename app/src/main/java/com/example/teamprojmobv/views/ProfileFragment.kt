@@ -1,6 +1,7 @@
 package com.example.teamprojmobv.views
 
 import android.content.Intent
+import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -8,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -17,15 +19,16 @@ import com.example.teamprojmobv.Data.util.Injection
 import com.example.teamprojmobv.R
 import com.example.teamprojmobv.databinding.FragmentProfileBinding
 import com.example.teamprojmobv.views.viewModels.DatabaseViewModel
+import com.example.viewmodel.data.db.model.UserItem
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.*
 
 
 class ProfileFragment : Fragment() {
     private lateinit var databaseViewModel: DatabaseViewModel
     private lateinit var binding: FragmentProfileBinding
-    private var selectedImageUri: Uri? = null
     private val pickImage = 100
-    private var imageUri: Uri? = null
+    //private var selectedImageUri: Uri? = null
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -48,48 +51,70 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val userInfo = databaseViewModel.getUserInfo()
+        setUpProfileData(userInfo)
+        setUpListenersForProfileImage()
+        setListenersForChangingPassword()
+        loadProfilePictureFromserver(userInfo.profile)
+    }
+
+    fun loadProfilePictureFromserver(endPoint : String){
+        //val imageUrl = "https://cdn.pixabay.com/photo/2017/11/06/18/39/apple-2924531_960_720.jpg"
+        val imageUrl = "http://api.mcomputing.eu/mobv/uploads/"+endPoint
+        Log.i("profilefragment" , imageUrl)
+        val profileImage = view?.findViewById<ImageView>(R.id.profileImage)
+        Picasso.get().isLoggingEnabled = true
+        Picasso.get()
+            .load(imageUrl)
+            .placeholder(R.drawable.ic_profile_pic)
+            .into(profileImage)
+    }
+
+    fun setUpProfileData(userInfo : UserItem){
         binding.nickname = userInfo.username
         binding.mail = userInfo.email
+    }
 
+    fun setUpListenersForProfileImage(){
         profileImage.setOnClickListener{
             val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
             startActivityForResult(gallery, pickImage)
         }
-
         imageEditIcon.setOnClickListener{
             val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
             startActivityForResult(gallery, pickImage)
         }
+    }
 
+    fun setListenersForChangingPassword(){
         buttonChangePwd.setOnClickListener{
-            showChangePasswordViews()
+            showViewsForChangingPassword()
         }
-
         buttonSavePasswordChange.setOnClickListener{
-            //TODO tu by som mala spristupnovat local cache ale narychlo som to nevedela
-            val pwd = databaseViewModel.getPassword()
-            Log.i("ProfileFragemnt", pwd)
-
-            if(editTextOldPassword.text.toString() != pwd){
-                createToast("Incorrect old password")
-            }else if(editTextNewPassword.text.toString() == "" || editTextConfirmPassword.text.toString() == ""){
-                createToast("Fields cannot be empty")
-            } else if(editTextOldPassword.text.toString() == editTextNewPassword.text.toString()){
-                createToast("Old and new passwords are the same")
-            }else if(editTextNewPassword.text.toString() != editTextConfirmPassword.text.toString()){
-                createToast("Passwords are not the same")
-            } else{
-                if(databaseViewModel.changePassword(editTextNewPassword.text.toString())){
-                    createToast("Password changed successfully")
-                }else{
-                    createToast("Server is grumpy, your password was not changed")
-                }
-                hideChangePasswordViews()
-            }
+            checkIfPasswordsAreInCorrectForm()
         }
-
         buttonCancelPasswordChange.setOnClickListener{
-            hideChangePasswordViews()
+            hideViewsForChangingPassword()
+        }
+    }
+
+    fun checkIfPasswordsAreInCorrectForm(){
+        //TODO tu by som mala spristupnovat local cache ale narychlo som to nevedela
+        if(editTextOldPassword.text.toString() != databaseViewModel.getCurrentPassword()){
+            createToast("Incorrect old password")
+            editTextOldPassword.text.clear()
+        }else if(editTextNewPassword.text.toString() == "" || editTextConfirmPassword.text.toString() == ""){
+            createToast("Fields cannot be empty")
+        } else if(editTextOldPassword.text.toString() == editTextNewPassword.text.toString()){
+            createToast("Old and new passwords are the same")
+        }else if(editTextNewPassword.text.toString() != editTextConfirmPassword.text.toString()){
+            createToast("Passwords are not the same")
+        } else{
+            if(databaseViewModel.changePassword(editTextNewPassword.text.toString())){
+                createToast("Password changed successfully")
+            }else{
+                createToast("Server is grumpy, your password was not changed")
+            }
+            hideViewsForChangingPassword()
         }
     }
 
@@ -97,7 +122,7 @@ class ProfileFragment : Fragment() {
         Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show()
     }
 
-    fun hideChangePasswordViews(){
+    fun hideViewsForChangingPassword(){
         buttonChangePwd.visibility = View.VISIBLE
         buttonCancelPasswordChange.visibility = View.GONE
         buttonSavePasswordChange.visibility = View.GONE
@@ -105,11 +130,11 @@ class ProfileFragment : Fragment() {
         editTextNewPassword.visibility = View.GONE
         editTextConfirmPassword.visibility = View.GONE
         editTextNewPassword.text.clear()
-        editTextOldPassword.text.clear()
         editTextConfirmPassword.text.clear()
+        editTextOldPassword.text.clear()
     }
 
-    fun showChangePasswordViews(){
+    fun showViewsForChangingPassword(){
         buttonChangePwd.visibility = View.GONE
         editTextOldPassword.visibility = View.VISIBLE
         editTextNewPassword.visibility = View.VISIBLE
@@ -121,10 +146,36 @@ class ProfileFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        var selectedImageUri: Uri? = null
+
 
         if (resultCode == AppCompatActivity.RESULT_OK && requestCode == pickImage) {
-            imageUri = data?.data
-            profileImage.setImageURI(imageUri)
+            selectedImageUri = data?.data
+            profileImage.setImageURI(selectedImageUri)
         }
+
+        val picturePath = getPicturePath(selectedImageUri)
+        if (picturePath != null) {
+            databaseViewModel.loadUserPhoto(picturePath)
+
+        }
+    }
+
+    fun getPicturePath(selectedImageUri : Uri?):String?{
+        val filePathColumn =
+            arrayOf(MediaStore.Images.Media.DATA)
+
+        val cursor: Cursor? = selectedImageUri?.let {
+            activity?.contentResolver?.query(
+                it,
+                filePathColumn, null, null, null
+            )
+        }
+        cursor?.moveToFirst()
+
+        val columnIndex: Int? = cursor?.getColumnIndex(filePathColumn[0])
+        val picturePath: String? = columnIndex?.let { cursor?.getString(it) }
+        cursor?.close()
+        return picturePath
     }
 }

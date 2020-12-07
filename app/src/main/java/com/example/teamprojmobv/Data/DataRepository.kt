@@ -7,10 +7,9 @@ import com.example.teamprojmobv.Data.db.LocalCache
 import com.example.teamprojmobv.Data.util.ChCrypto
 import com.example.viewmodel.data.db.model.UserItem
 import com.opinyour.android.app.data.api.WebApi
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import java.io.File
@@ -253,6 +252,40 @@ class DataRepository private constructor(
         } catch (ex: Exception) {
             ex.printStackTrace()
             return false
+        }
+    }
+
+    suspend fun uploadProfilePhoto(
+        filePath: String,
+        apikey: String,
+    ) {
+        try {
+            val file = File(filePath)
+            val jsonData = JSONObject()
+            jsonData.put("apikey", apikey)
+            jsonData.put("token", token)
+            val jsonDataString = jsonData.toString()
+            val json= jsonDataString.toRequestBody("application/json".toMediaTypeOrNull())
+            val image = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+            val filePart = MultipartBody.Part.createFormData("image", "image" ,image)
+
+            val response = api.createPhoto(filePart, json)
+
+            Log.i("DataRepository upload", response.toString())           //vracia 400
+            Log.i("DataRepository upload", response.body().toString())   //vracia null
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    Log.i("DataRepository upload", it.string())   //json vracia {"status":"success"}
+                    return
+                }
+            }
+        } catch (ex: ConnectException) {
+            ex.printStackTrace()
+            return
+        } catch (ex: Exception) {
+            Log.e("DataRepository upload", ex.toString())
+            ex.printStackTrace()
+            return
         }
     }
 }

@@ -5,6 +5,6 @@ object ApiConstants{
     const val LOGIN_CONST = "login"
     const val REG_CONST = "register"
     const val EXISTS_CONST = "exists"
+    const val PWD_CONST = "password"
     const val SYM_ENC_KEY = "5nRJ1Q8NePtgwU0xCB8noF8S9vah4wzW"
-
 }

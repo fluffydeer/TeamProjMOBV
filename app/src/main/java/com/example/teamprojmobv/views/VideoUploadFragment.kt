@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import com.example.teamprojmobv.Data.util.Injection
 import com.example.teamprojmobv.MainActivity
 import com.example.teamprojmobv.R
 import com.example.teamprojmobv.views.viewModels.DatabaseViewModel
@@ -29,6 +31,12 @@ class VideoUploadFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+
+        databaseViewModel = ViewModelProvider(
+            this,
+            Injection.provideViewModelFactory(requireContext())
+        ).get(DatabaseViewModel::class.java)
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_video_upload, container, false)
     }
@@ -45,17 +53,13 @@ class VideoUploadFragment : Fragment() {
         }
 
         button_upload.setOnClickListener {
-
-
-
             /*
             * TODO: doplnit upload videa na server
             * cesta k videu je ulozena tu: MainActivity.recVideoPath
             *
             * */
 
-            databaseViewModel.addUserVideo(MainActivity.recVideoPath, "yS9zD3dI4uR2aK0cY9cS5pT6tK2rZ6")
-
+            databaseViewModel.addUserVideo(MainActivity.recVideoPath)
             view.findNavController().navigate(R.id.action_videoUploadFragment_to_videoViewerFragment)
         }
 

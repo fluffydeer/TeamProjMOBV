@@ -7,8 +7,10 @@ import com.example.teamprojmobv.Data.db.LocalCache
 import com.example.teamprojmobv.Data.util.ChCrypto
 import com.example.viewmodel.data.db.model.UserItem
 import com.opinyour.android.app.data.api.WebApi
+import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
@@ -49,6 +51,12 @@ class DataRepository private constructor(
     //tu by som asi mala tahat prihlaseneho uzivatela z cache vsak na co to mame
     fun getLoggedUser():UserItem{
         return loggedUser
+    }
+
+    fun resetUserInfo(){
+        token = ""
+        pwd = ""
+        loggedUser = UserItem(-1, "", "", "", "", "", -1)
     }
 
     suspend fun createUser(
@@ -179,28 +187,25 @@ class DataRepository private constructor(
     ) {
         try {
             val file = File(filePath)
-
             val jsonData = JSONObject()
-
-            //token = logged
             jsonData.put("apikey", apikey)
             jsonData.put("token", token)
             val jsonDataString = jsonData.toString()
-//            val json= RequestBody.create(MediaType.parse("application/json"), jsonDataString)
-//            val video = RequestBody.create(MediaType.parse("video/*"), file)
-//            val filePart =
-//                MultipartBody.Part.createFormData("video", "video" ,video)
-//
-//            val responseVideo = api.createVideo(filePart, json)
-//
-//            Log.i("DataRepository upload", responseVideo.toString())
-//            Log.i("DataRepository upload", responseVideo.body().toString())
-//            if (responseVideo.isSuccessful) {
-//                responseVideo.body()?.let {
-//                    Log.i("DataRepository upload", it.string())
-//                    return
-//                }
-//            }
+            val json= jsonDataString.toRequestBody("application/json".toMediaTypeOrNull())
+            val video = file.asRequestBody("video/mp4".toMediaTypeOrNull())
+            val filePart =
+                MultipartBody.Part.createFormData("video", "video" ,video)
+
+            val responseVideo = api.createVideo(filePart, json)
+
+            Log.i("DataRepository upload", responseVideo.toString())
+            Log.i("DataRepository upload", responseVideo.body().toString())
+            if (responseVideo.isSuccessful) {
+                responseVideo.body()?.let {
+                    Log.i("DataRepository upload", it.string())
+                    return
+                }
+            }
         } catch (ex: ConnectException) {
             ex.printStackTrace()
             return

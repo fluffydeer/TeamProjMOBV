@@ -28,7 +28,6 @@ class ProfileFragment : Fragment() {
     private lateinit var databaseViewModel: DatabaseViewModel
     private lateinit var binding: FragmentProfileBinding
     private val pickImage = 100
-    //private var selectedImageUri: Uri? = null
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -96,6 +95,13 @@ class ProfileFragment : Fragment() {
         buttonCancelPasswordChange.setOnClickListener{
             hideViewsForChangingPassword()
         }
+        buttonLogout.setOnClickListener(){
+            logOutUser()
+        }
+    }
+
+    fun logOutUser(){
+        //databaseViewModel.logOutUser()
     }
 
     fun checkIfPasswordsAreInCorrectForm(){

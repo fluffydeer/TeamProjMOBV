@@ -1,7 +1,6 @@
 package com.opinyour.android.app.data.api
 
 import android.content.Context
-import com.example.teamprojmobv.Data.db.model.ExistsItem
 import com.example.viewmodel.data.db.model.UserItem
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
@@ -23,7 +22,7 @@ interface WebApi {
     @Multipart
     @POST("/mobv/upload.php")
     suspend fun createVideo(
-        @Part image: MultipartBody.Part,
+        @Part video: MultipartBody.Part,
         @Part("data") video_json: RequestBody
     ): Response<ResponseBody>
 

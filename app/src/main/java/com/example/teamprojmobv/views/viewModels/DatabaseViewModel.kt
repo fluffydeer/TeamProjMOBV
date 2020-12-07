@@ -49,9 +49,9 @@ class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
         }
     }
 
-    fun addUserVideo(filePath: String, apikey: String) {
+    fun addUserVideo(filePath: String) {
         viewModelScope.launch {
-            repository.uploadVideo(filePath, apikey)
+            repository.uploadVideo(filePath, ApiConstants.API_KEY)
         }
     }
 

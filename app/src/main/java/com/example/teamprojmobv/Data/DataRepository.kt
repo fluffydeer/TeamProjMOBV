@@ -146,7 +146,7 @@ class DataRepository private constructor(
         }
         return false
     }
-
+/*
     suspend fun existsUser(existsConst: String, apiKey: String, value: String): Boolean {
         try {
             val jsonObject = JSONObject()
@@ -156,10 +156,13 @@ class DataRepository private constructor(
             val jsonObjectString = jsonObject.toString()
             // Create RequestBody ( We're not using any converter, like GsonConverter, MoshiConverter e.t.c, that's why we use RequestBody )
             val requestBody = jsonObjectString.toRequestBody("application/json".toMediaTypeOrNull())
-
-            val response = api.existsUser(requestBody)
-            return response
-
+            val response = api.existsUser( requestBody)
+            //val response = api.existsUser(existsConst, apiKey, value)
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    return it.exists
+                }
+            }
         } catch (ex: ConnectException) {
             ex.printStackTrace()
             return true
@@ -167,9 +170,9 @@ class DataRepository private constructor(
             ex.printStackTrace()
             return true
         }
-
+        return true
     }
-
+*/
     suspend fun uploadVideo(
         filePath: String,
         apikey: String,

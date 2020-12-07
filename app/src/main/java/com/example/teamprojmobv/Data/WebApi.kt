@@ -1,6 +1,7 @@
 package com.opinyour.android.app.data.api
 
 import android.content.Context
+import com.example.teamprojmobv.Data.db.model.ExistsItem
 import com.example.viewmodel.data.db.model.UserItem
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
@@ -26,23 +27,20 @@ interface WebApi {
         @Part("data") video_json: RequestBody
     ): Response<ResponseBody>
 
-    // Raw JSON
     @POST("/mobv/service.php")
     suspend fun createUser(@Body requestBody: RequestBody): Response<UserItem>
 
-    // Raw JSON
     @POST("/mobv/service.php")
     suspend fun loginUser(@Body requestBody: RequestBody): Response<UserItem>
-
-    @GET("/mobv/service.php")
-    suspend fun existsUser(@Body requestBody: RequestBody): Boolean
 
     @POST("/mobv/service.php")
     suspend fun changePassword(@Body requestBody: RequestBody): Response<UserItem>
 
+    /* @GET("/mobv/service.php")
+    suspend fun existsUser(@Header("Content-Type") "application/json" : String, @Body requestBody: RequestBody): Response<ExistsItem>*/
 
-    //@GET("realestate")
-    //suspend fun getProperties(): Response<List<MarsResponse>>
+    /*@GET("/mobv/service.php")
+    suspend fun existsUser(@Query("action") action: String, @Query("apikey") apikey: String, @Query("username") username: String): Response<ExistsItem>*/
 
     companion object {
         private const val BASE_URL =

@@ -20,7 +20,7 @@ interface WebApi {
     ): Response<ResponseBody>
 
     @Multipart
-    @POST("/mobv/upload.php")
+    @POST("/mobv/post.php")
     suspend fun createVideo(
         @Part video: MultipartBody.Part,
         @Part("data") video_json: RequestBody

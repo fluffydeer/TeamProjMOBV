@@ -154,6 +154,30 @@ class DataRepository private constructor(
         }
         return false
     }
+    suspend fun getVideos(action: String,
+                          apikey: String){
+        try {
+            val jsonObject = JSONObject()
+            jsonObject.put("action", action)
+            jsonObject.put("apikey", apikey)
+            jsonObject.put("token", token)
+            val jsonObjectString = jsonObject.toString()
+            // Create RequestBody ( We're not using any converter, like GsonConverter, MoshiConverter e.t.c, that's why we use RequestBody )
+            val requestBody = jsonObjectString.toRequestBody("application/json".toMediaTypeOrNull())
+
+            val response = api.getVideos(requestBody)
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    //TODO
+                }
+            }
+        } catch (ex: ConnectException) {
+            ex.printStackTrace()
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
+    }
+
 /*
     suspend fun existsUser(existsConst: String, apiKey: String, value: String): Boolean {
         try {

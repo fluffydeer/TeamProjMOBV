@@ -48,7 +48,7 @@ class ProfileFragment : Fragment() {
     //todo toto vsetko treba hodit do viemodelu ci?
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        
         val userInfo = databaseViewModel.getUserInfo()
         setUpProfileData(userInfo)
         setUpListenersForProfileImage()

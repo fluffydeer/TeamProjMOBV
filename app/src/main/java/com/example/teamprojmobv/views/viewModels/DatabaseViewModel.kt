@@ -27,6 +27,7 @@ class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
     //val text: LiveData<String> = Transformations.map(actualUser) { it.toString() }
     //val loggedUser: LiveData<UserItem> = Transformations.map(actualUsers) { it.first() }
 
+
     fun register() {
         viewModelScope.launch {
             //if(!repository.existsUser(ApiConstants.EXISTS_CONST,ApiConstants.API_KEY, (username.value!!)))
@@ -41,6 +42,11 @@ class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
                 ApiConstants.API_KEY, (username.value!!), (password.value!!))
         }
     }
+    fun getVideos() {
+        viewModelScope.launch {
+            repository.getVideos(ApiConstants.POSTS_CONST, ApiConstants.API_KEY)
+        }
+    }
 
     // ako logout??
     fun deleteUsers() {
@@ -48,6 +54,7 @@ class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
             repository.deleteUsers()
         }
     }
+
 
     fun addUserVideo(filePath: String) {
         viewModelScope.launch {
@@ -80,4 +87,6 @@ class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
             repository.uploadProfilePhoto(filePath, ApiConstants.API_KEY)
         }
     }
+
+
 }

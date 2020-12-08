@@ -127,6 +127,8 @@ class ProfileFragment : Fragment() {
             createToast("Old and new passwords are the same")
         }else if(editTextNewPassword.text.toString() != editTextConfirmPassword.text.toString()){
             createToast("Passwords are not the same")
+        }else if(editTextNewPassword.text.toString().length < 4 || editTextNewPassword.text.toString().length > 32){
+            createToast("Password needs to have min 4 and max 32 characters.")
         } else{
             if(databaseViewModel.changePassword(editTextNewPassword.text.toString())){
                 createToast("Password changed successfully")

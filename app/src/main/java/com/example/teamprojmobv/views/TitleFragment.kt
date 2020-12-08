@@ -29,6 +29,8 @@ class TitleFragment : Fragment() {
             .get(DatabaseViewModel::class.java)
         binding.model = databaseViewModel
 
+        //throw RuntimeException("Test crash")
+
         return binding.root
     }
 

@@ -20,6 +20,8 @@ import com.example.teamprojmobv.R
 import com.example.teamprojmobv.databinding.FragmentProfileBinding
 import com.example.teamprojmobv.views.viewModels.DatabaseViewModel
 import com.example.viewmodel.data.db.model.UserItem
+import com.squareup.picasso.MemoryPolicy
+import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.*
 
@@ -27,6 +29,7 @@ import kotlinx.android.synthetic.main.fragment_profile.*
 class ProfileFragment : Fragment() {
     private lateinit var databaseViewModel: DatabaseViewModel
     private lateinit var binding: FragmentProfileBinding
+    private lateinit var userInfo : UserItem
     private val pickImage = 100
 
 
@@ -49,21 +52,27 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val userInfo = databaseViewModel.getUserInfo()
+        userInfo = databaseViewModel.getUserInfo()
         setUpProfileData(userInfo)
         setUpListenersForProfileImage()
         setListenersForChangingPassword()
-        loadProfilePictureFromserver(userInfo.profile)
+        if(databaseViewModel.imageUri == null){
+            loadProfilePictureFromServer(userInfo.profile)
+        }else{
+            profileImage.setImageURI(databaseViewModel.imageUri)
+        }
     }
 
-    fun loadProfilePictureFromserver(endPoint : String){
-        //val imageUrl = "https://cdn.pixabay.com/photo/2017/11/06/18/39/apple-2924531_960_720.jpg"
+    fun loadProfilePictureFromServer(endPoint : String){
+        val imageUrl2 = "https://cdn.pixabay.com/photo/2017/11/06/18/39/apple-2924531_960_720.jpg"
         val imageUrl = "http://api.mcomputing.eu/mobv/uploads/"+endPoint
         Log.i("profilefragment" , imageUrl)
         val profileImage = view?.findViewById<ImageView>(R.id.profileImage)
         Picasso.get().isLoggingEnabled = true
         Picasso.get()
             .load(imageUrl)
+            /*.memoryPolicy(MemoryPolicy.NO_CACHE)
+            .networkPolicy(NetworkPolicy.NO_CACHE)*/
             .placeholder(R.drawable.ic_profile_pic)
             .into(profileImage)
     }
@@ -156,16 +165,19 @@ class ProfileFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         var selectedImageUri: Uri? = null
 
-
         if (resultCode == AppCompatActivity.RESULT_OK && requestCode == pickImage) {
             selectedImageUri = data?.data
             profileImage.setImageURI(selectedImageUri)
-        }
+            databaseViewModel.imageUri = selectedImageUri             //;_;
 
-        val picturePath = getPicturePath(selectedImageUri)
-        if (picturePath != null) {
-            databaseViewModel.loadUserPhoto(picturePath)
-
+            //nechce to stahovat zo servera fotku ktoru ma - ako keby si to
+            //pamatalo to co stiahlo ako prve
+            val picturePath = getPicturePath(selectedImageUri)
+            if (picturePath != null) {
+                if(!databaseViewModel.loadUserPhoto(picturePath)){
+                    createToast("There was a problem uploading the picture, try again")
+                }
+            }
         }
     }
 

@@ -1,6 +1,6 @@
 package com.example.teamprojmobv.views.viewModels
 
-
+import android.net.Uri
 import androidx.lifecycle.*
 import com.example.teamprojmobv.Data.ApiConstants
 import com.example.teamprojmobv.Data.DataRepository
@@ -13,7 +13,7 @@ class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
     val email: MutableLiveData<String> = MutableLiveData()
     val username: MutableLiveData<String> = MutableLiveData()
     val password: MutableLiveData<String> = MutableLiveData()
-
+    var imageUri : Uri? = null
 
     /*val actualUsers: LiveData<List<UserItem>>
         get() = repository.getActualUsers()*/
@@ -21,7 +21,7 @@ class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
     val getActualUser: LiveData<UserItem>
         get() = repository.getActualUser()
 
-     val successRes :MutableLiveData<Boolean> = MutableLiveData<Boolean>()
+    val successRes :MutableLiveData<Boolean> = MutableLiveData<Boolean>()
 
 
     //val text: LiveData<String> = Transformations.map(actualUser) { it.toString() }
@@ -75,9 +75,10 @@ class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
         return repository.getPassword()
     }
 
-    fun loadUserPhoto(filePath: String) {
-        viewModelScope.launch {
+    fun loadUserPhoto(filePath: String) : Boolean{
+        val result = runBlocking {
             repository.uploadProfilePhoto(filePath, ApiConstants.API_KEY)
         }
+        return result
     }
 }

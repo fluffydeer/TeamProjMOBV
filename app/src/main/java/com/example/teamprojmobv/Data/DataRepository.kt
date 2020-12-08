@@ -1,6 +1,7 @@
 
 package com.example.teamprojmobv.Data
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.teamprojmobv.Data.db.LocalCache
@@ -30,6 +31,8 @@ class DataRepository private constructor(
     private lateinit var token: String
     private lateinit var pwd: String
     private lateinit var loggedUser : UserItem
+    private  var imageUri : Uri? = null
+
 
     companion object {
         const val TAG = "DataRepository"
@@ -44,8 +47,8 @@ class DataRepository private constructor(
     }
 
     fun getActualUsers(): LiveData<List<UserItem>> = cache.getActualUsers()
-    fun getActualUser(): LiveData<UserItem> = cache.getActualUser()
-    fun deleteUsers() = cache.deleteUsers()
+    suspend fun getActualUser(): LiveData<UserItem> = cache.getActualUser()
+    suspend fun deleteUsers() = cache.deleteUsers()
     fun getPassword():String = pwd
 
     //tu by som asi mala tahat prihlaseneho uzivatela z cache vsak na co to mame
@@ -53,7 +56,16 @@ class DataRepository private constructor(
         return loggedUser
     }
 
+    fun getImageUri(): Uri? {
+        return imageUri
+    }
+
+    fun setImageUri(uri:Uri){
+        imageUri=uri
+    }
+
     fun resetUserInfo(){
+        imageUri = null
         token = ""
         pwd = ""
         loggedUser = UserItem(-1, "", "", "", "", "", -1)

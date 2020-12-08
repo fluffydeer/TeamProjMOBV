@@ -11,7 +11,7 @@ interface DbDao {
     suspend fun insertUser(userItem: UserItem)
 
     @Query("DELETE FROM users")
-    fun deleteUsers()
+    suspend fun deleteUsers()
 
     @Query("SELECT * FROM users ORDER BY timestamp LIMIT 1")
     fun getActualUsers(): LiveData<List<UserItem>>

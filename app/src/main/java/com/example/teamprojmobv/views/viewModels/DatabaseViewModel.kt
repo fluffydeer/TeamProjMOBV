@@ -13,16 +13,23 @@ class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
     val email: MutableLiveData<String> = MutableLiveData()
     val username: MutableLiveData<String> = MutableLiveData()
     val password: MutableLiveData<String> = MutableLiveData()
-    var imageUri : Uri? = null
 
-    /*val actualUsers: LiveData<List<UserItem>>
-        get() = repository.getActualUsers()*/
+    fun getLoggedUser() : LiveData<UserItem>{
+        val result = runBlocking {
+            repository.getActualUser()
+        }
+        return result
+    }
 
-    val getActualUser: LiveData<UserItem>
-        get() = repository.getActualUser()
+    fun getImageUri() : Uri? {
+        return repository.getImageUri()
+    }
+
+    fun setImageUri(uri:Uri){
+        repository.setImageUri(uri)
+    }
 
     val successRes :MutableLiveData<Boolean> = MutableLiveData<Boolean>()
-
 
     //val text: LiveData<String> = Transformations.map(actualUser) { it.toString() }
     //val loggedUser: LiveData<UserItem> = Transformations.map(actualUsers) { it.first() }
@@ -63,10 +70,6 @@ class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
         return result
     }
 
-    fun getLoggedUser() : LiveData<UserItem>{
-        return repository.getActualUser()
-    }
-
     fun getUserInfo(): UserItem {
         return repository.getLoggedUser()
     }
@@ -80,5 +83,12 @@ class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
             repository.uploadProfilePhoto(filePath, ApiConstants.API_KEY)
         }
         return result
+    }
+
+    fun logOutUser(){
+        repository.resetUserInfo()
+        viewModelScope.launch {
+            repository.deleteUsers()
+        }
     }
 }

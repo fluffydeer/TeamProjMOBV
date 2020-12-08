@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import com.example.teamprojmobv.Data.util.Injection
 import com.example.teamprojmobv.R
 import com.example.teamprojmobv.databinding.FragmentProfileBinding
@@ -56,11 +57,12 @@ class ProfileFragment : Fragment() {
         setUpProfileData(userInfo)
         setUpListenersForProfileImage()
         setListenersForChangingPassword()
-        if(databaseViewModel.imageUri == null){
+        if(databaseViewModel.getImageUri() == null){
             loadProfilePictureFromServer(userInfo.profile)
         }else{
-            profileImage.setImageURI(databaseViewModel.imageUri)
+            profileImage.setImageURI(databaseViewModel.getImageUri())
         }
+        setListenersForLogOut(view)
     }
 
     fun loadProfilePictureFromServer(endPoint : String){
@@ -71,8 +73,8 @@ class ProfileFragment : Fragment() {
         Picasso.get().isLoggingEnabled = true
         Picasso.get()
             .load(imageUrl)
-            /*.memoryPolicy(MemoryPolicy.NO_CACHE)
-            .networkPolicy(NetworkPolicy.NO_CACHE)*/
+            .memoryPolicy(MemoryPolicy.NO_CACHE)
+            .networkPolicy(NetworkPolicy.NO_CACHE)
             .placeholder(R.drawable.ic_profile_pic)
             .into(profileImage)
     }
@@ -104,13 +106,13 @@ class ProfileFragment : Fragment() {
         buttonCancelPasswordChange.setOnClickListener{
             hideViewsForChangingPassword()
         }
-        buttonLogout.setOnClickListener(){
-            logOutUser()
-        }
     }
 
-    fun logOutUser(){
-        //databaseViewModel.logOutUser()
+    fun setListenersForLogOut(view : View){
+        buttonLogout.setOnClickListener(){
+            databaseViewModel.logOutUser()
+            view.findNavController().navigate(R.id.action_profileFragment_to_titleFragment)
+        }
     }
 
     fun checkIfPasswordsAreInCorrectForm(){
@@ -168,7 +170,9 @@ class ProfileFragment : Fragment() {
         if (resultCode == AppCompatActivity.RESULT_OK && requestCode == pickImage) {
             selectedImageUri = data?.data
             profileImage.setImageURI(selectedImageUri)
-            databaseViewModel.imageUri = selectedImageUri             //;_;
+            if (selectedImageUri != null) {
+                databaseViewModel.setImageUri(selectedImageUri)
+            }
 
             //nechce to stahovat zo servera fotku ktoru ma - ako keby si to
             //pamatalo to co stiahlo ako prve

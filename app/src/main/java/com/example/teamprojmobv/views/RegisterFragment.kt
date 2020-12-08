@@ -18,7 +18,6 @@ import com.example.teamprojmobv.views.viewModels.DatabaseViewModel
 import com.example.teamprojmobv.Data.util.Injection
 
 class RegisterFragment : Fragment() {
-    //private val homeViewModel: HomeViewModel by viewModels()
     private lateinit var databaseViewModel: DatabaseViewModel
     private lateinit var binding: FragmentRegisterBinding
 
@@ -54,7 +53,6 @@ class RegisterFragment : Fragment() {
             }
         }
 
-
             binding.buttonRegisterREG.setOnClickListener {
                 val username = databaseViewModel.username.value
                 val email = databaseViewModel.email.value
@@ -76,99 +74,46 @@ class RegisterFragment : Fragment() {
                     return@setOnClickListener
                 }
 
+                // ak je username prazdny alebo null tak sa sem nedostane
+                if(username.length < 4)
+                {
+                    binding.editUserNameREG.error = "Username requires at least 4 characters"
+                    binding.editUserNameREG.requestFocus()
+                    return@setOnClickListener
+                }
+
+                if(username.length > 32)
+                {
+                    binding.editUserNameREG.error = "Maximum username length is 32 characters"
+                    binding.editUserNameREG.requestFocus()
+                    return@setOnClickListener
+                }
+
                 if(password.isNullOrBlank())
                 {
                     binding.editTextPasswordREG.error = "Password required"
                     binding.editTextPasswordREG.requestFocus()
                     return@setOnClickListener
                 }
-                // hashovat heslo
+
+                if(password.length < 4)
+                {
+                    binding.editTextPasswordREG.error = "Password requires at least 4 characters"
+                    binding.editTextPasswordREG.requestFocus()
+                    return@setOnClickListener
+                }
+
+                if(password.length > 32)
+                {
+                    binding.editTextPasswordREG.error = "Maximum password length is 32 characters"
+                    binding.editTextPasswordREG.requestFocus()
+                    return@setOnClickListener
+                }
 
                 databaseViewModel.register()
-
-
-                /*databaseViewModel.actualUser.observe(viewLifecycleOwner) {
-                    if (it != null) {
-                        if (!it.username.isNullOrEmpty()) {
-                            view.findNavController().navigate(R.id.action_registerFragment_to_videoViewerFragment)
-                        } else {
-                            Toast.makeText(
-                                getActivity(),
-                                "Incorrect register data!",
-                                Toast.LENGTH_SHORT
-                            ).show();
-                        }
-                    } else {
-                        Toast.makeText(getActivity(), "Incorrect register data!", Toast.LENGTH_SHORT)
-                            .show();
-                    }
-                }*/
         }
         binding.textViewLoginREG.setOnClickListener{
             view.findNavController().navigate(R.id.action_registerFragment_to_titleFragment)
         }
-
-
     }
-/*
-    private fun Register() {
-
-        // Create Retrofit
-        val retrofit = Retrofit.Builder()
-            .baseUrl("http://api.mcomputing.eu/")
-            .build()
-
-        // Create Service
-        val service = retrofit.create(APIService::class.java)
-
-
-
-        // Create JSON using JSONObject
-        val jsonObject = JSONObject()
-        jsonObject.put("action", "register")
-        jsonObject.put("apikey", "yS9zD3dI4uR2aK0cY9cS5pT6tK2rZ6")
-        jsonObject.put("email", editEmailREG)
-        jsonObject.put("username", editUserNameREG)
-        jsonObject.put("password", editTextPasswordREG)
-
-        /*
-        jsonObject.put("action", "register")
-        jsonObject.put("apikey", "yS9zD3dI4uR2aK0cY9cS5pT6tK2rZ6")
-        jsonObject.put("email", "john3@doe.com")
-        jsonObject.put("username", "test12")
-        jsonObject.put("password", "oV3aK9iB5")*/
-
-        // Convert JSONObject to String
-        val jsonObjectString = jsonObject.toString()
-
-        // Create RequestBody ( We're not using any converter, like GsonConverter, MoshiConverter e.t.c, that's why we use RequestBody )
-        val requestBody = jsonObjectString.toRequestBody("application/json".toMediaTypeOrNull())
-
-        CoroutineScope(Dispatchers.IO).launch {
-            // Do the POST request and get response
-            val response = service.createUser(requestBody)
-
-            withContext(Dispatchers.Main) {
-                if (response.isSuccessful) {
-
-                    // Convert raw JSON to pretty JSON using GSON library
-                    val gson = GsonBuilder().setPrettyPrinting().create()
-                    val prettyJson = gson.toJson(
-                        JsonParser.parseString(
-                            response.body()
-                                ?.string() // About this thread blocking annotation : https://github.com/square/retrofit/issues/3255
-                        )
-                    )
-                    Log.d("Pretty Printed JSON :", prettyJson)
-                    val user = gson.fromJson(prettyJson, LoggedUser::class.java)
-
-
-                } else {
-
-                    Log.e("RETROFIT_ERROR", response.code().toString())
-
-                }
-            }
-        }
-    }*/
 }

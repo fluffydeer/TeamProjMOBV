@@ -29,8 +29,6 @@ class TitleFragment : Fragment() {
             .get(DatabaseViewModel::class.java)
         binding.model = databaseViewModel
 
-
-
         return binding.root
     }
 
@@ -71,25 +69,7 @@ class TitleFragment : Fragment() {
             }
 
             //Login()
-            // register aj apikey dat ako konstanty, hashovat heslo
             databaseViewModel.login()
-
-            /*databaseViewModel.successRes.observe(viewLifecycleOwner) {
-                it?.let {
-                    // Now foo is non-null
-                    if (it) {
-
-                        view.findNavController()
-                            .navigate(R.id.action_titleFragment_to_videoViewerFragment)
-                    } else {
-                        Toast.makeText(getActivity(), "Incorrect login data!", Toast.LENGTH_SHORT)
-                            .show();
-                    }
-                }
-            }*/
-
-
-
         }
 
         binding.textViewLOG.setOnClickListener{

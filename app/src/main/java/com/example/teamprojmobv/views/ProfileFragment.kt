@@ -17,7 +17,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.teamprojmobv.data.util.Injection
 import androidx.navigation.findNavController
-import com.example.teamprojmobv.Data.util.Injection
 import com.example.teamprojmobv.R
 import com.example.teamprojmobv.databinding.FragmentProfileBinding
 import com.example.teamprojmobv.views.viewModels.DatabaseViewModel

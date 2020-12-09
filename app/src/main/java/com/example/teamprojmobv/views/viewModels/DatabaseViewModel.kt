@@ -1,7 +1,6 @@
 package com.example.teamprojmobv.views.viewModels
 
 import android.net.Uri
-import android.net.Uri
 import androidx.lifecycle.*
 import com.example.teamprojmobv.data.ApiConstants
 import com.example.teamprojmobv.data.DataRepository

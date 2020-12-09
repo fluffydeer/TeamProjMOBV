@@ -31,7 +31,9 @@ import com.example.teamprojmobv.R
 private const val PERMISSIONS_REQUEST_CODE = 10
 private val PERMISSIONS_REQUIRED = arrayOf(
         Manifest.permission.CAMERA,
-        Manifest.permission.RECORD_AUDIO)
+        Manifest.permission.RECORD_AUDIO,
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
 /**
  * This [Fragment] requests permissions and, once granted, it will navigate to the next fragment

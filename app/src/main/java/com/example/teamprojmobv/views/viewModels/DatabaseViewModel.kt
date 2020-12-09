@@ -1,6 +1,7 @@
 package com.example.teamprojmobv.views.viewModels
 
-
+import android.net.Uri
+import android.net.Uri
 import androidx.lifecycle.*
 import com.example.teamprojmobv.data.ApiConstants
 import com.example.teamprojmobv.data.DataRepository
@@ -15,7 +16,16 @@ class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
     val username: MutableLiveData<String> = MutableLiveData()
     val password: MutableLiveData<String> = MutableLiveData()
 
+    fun getLoggedUser() : LiveData<UserItem>{
+        val result = runBlocking {
+            repository.getActualUser()
+        }
+        return result
+    }
 
+    fun getImageUri() : Uri? {
+        return repository.getImageUri()
+    }
     private var mediaData:ArrayList<MediaItem>? = ArrayList<MediaItem>()
 
 
@@ -28,11 +38,11 @@ class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
     /*val actualUsers: LiveData<List<UserItem>>
         get() = repository.getActualUsers()*/
 
-    val getActualUser: LiveData<UserItem>
-        get() = repository.getActualUser()
+    fun setImageUri(uri: Uri){
+        repository.setImageUri(uri)
+    }
 
-     val successRes :MutableLiveData<Boolean> = MutableLiveData<Boolean>()
-
+    val successRes :MutableLiveData<Boolean> = MutableLiveData<Boolean>()
 
     //val text: LiveData<String> = Transformations.map(actualUser) { it.toString() }
     //val loggedUser: LiveData<UserItem> = Transformations.map(actualUsers) { it.first() }
@@ -55,7 +65,6 @@ class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
     fun getVideos() : ArrayList<MediaItem>?{
         val result = runBlocking {
             repository.getVideos(ApiConstants.POSTS_CONST, ApiConstants.API_KEY)
-            // DatabaseViewModel.getVideos
         }
         return result
     }
@@ -82,10 +91,6 @@ class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
         return result
     }
 
-    fun getLoggedUser() : LiveData<UserItem>{
-        return repository.getActualUser()
-    }
-
     fun getUserInfo(): UserItem {
         return repository.getLoggedUser()
     }
@@ -94,9 +99,17 @@ class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
         return repository.getPassword()
     }
 
-    fun loadUserPhoto(filePath: String) {
-        viewModelScope.launch {
+    fun loadUserPhoto(filePath: String) : Boolean{
+        val result = runBlocking {
             repository.uploadProfilePhoto(filePath, ApiConstants.API_KEY)
+        }
+        return result
+    }
+
+    fun logOutUser(){
+        repository.resetUserInfo()
+        viewModelScope.launch {
+            repository.deleteUsers()
         }
     }
 

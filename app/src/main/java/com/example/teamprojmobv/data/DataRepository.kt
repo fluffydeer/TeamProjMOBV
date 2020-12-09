@@ -1,6 +1,7 @@
 
 package com.example.teamprojmobv.data
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.teamprojmobv.data.db.LocalCache
@@ -31,6 +32,8 @@ class DataRepository private constructor(
     private lateinit var token: String
     private lateinit var pwd: String
     private lateinit var loggedUser : UserItem
+    private  var imageUri : Uri? = null
+
 
     companion object {
         const val TAG = "DataRepository"
@@ -45,8 +48,8 @@ class DataRepository private constructor(
     }
 
     fun getActualUsers(): LiveData<List<UserItem>> = cache.getActualUsers()
-    fun getActualUser(): LiveData<UserItem> = cache.getActualUser()
-    fun deleteUsers() = cache.deleteUsers()
+    suspend fun getActualUser(): LiveData<UserItem> = cache.getActualUser()
+    suspend fun deleteUsers() = cache.deleteUsers()
     fun getPassword():String = pwd
 
     //tu by som asi mala tahat prihlaseneho uzivatela z cache vsak na co to mame
@@ -54,7 +57,16 @@ class DataRepository private constructor(
         return loggedUser
     }
 
+    fun getImageUri(): Uri? {
+        return imageUri
+    }
+
+    fun setImageUri(uri:Uri){
+        imageUri=uri
+    }
+
     fun resetUserInfo(){
+        imageUri = null
         token = ""
         pwd = ""
         loggedUser = UserItem(-1, "", "", "", "", "", -1)
@@ -155,6 +167,7 @@ class DataRepository private constructor(
         }
         return false
     }
+
     suspend fun getVideos(action: String,
                           apikey: String) : ArrayList<MediaItem>? {
         try {
@@ -190,33 +203,7 @@ class DataRepository private constructor(
         return null
     }
 
-/*
-    suspend fun existsUser(existsConst: String, apiKey: String, value: String): Boolean {
-        try {
-            val jsonObject = JSONObject()
-            jsonObject.put("action", existsConst)
-            jsonObject.put("apikey", apiKey)
-            jsonObject.put("username", value)
-            val jsonObjectString = jsonObject.toString()
-            // Create RequestBody ( We're not using any converter, like GsonConverter, MoshiConverter e.t.c, that's why we use RequestBody )
-            val requestBody = jsonObjectString.toRequestBody("application/json".toMediaTypeOrNull())
-            val response = api.existsUser( requestBody)
-            //val response = api.existsUser(existsConst, apiKey, value)
-            if (response.isSuccessful) {
-                response.body()?.let {
-                    return it.exists
-                }
-            }
-        } catch (ex: ConnectException) {
-            ex.printStackTrace()
-            return true
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-            return true
-        }
-        return true
-    }
-*/
+
     suspend fun uploadVideo(
         filePath: String,
         apikey: String,
@@ -302,7 +289,7 @@ class DataRepository private constructor(
     suspend fun uploadProfilePhoto(
         filePath: String,
         apikey: String,
-    ) {
+    ):Boolean {
         try {
             val file = File(filePath)
             val jsonData = JSONObject()
@@ -320,16 +307,17 @@ class DataRepository private constructor(
             if (response.isSuccessful) {
                 response.body()?.let {
                     Log.i("DataRepository upload", it.string())   //json vracia {"status":"success"}
-                    return
+                    return true
                 }
             }
+            return false
         } catch (ex: ConnectException) {
             ex.printStackTrace()
-            return
+            return false
         } catch (ex: Exception) {
             Log.e("DataRepository upload", ex.toString())
             ex.printStackTrace()
-            return
+            return false
         }
     }
 }

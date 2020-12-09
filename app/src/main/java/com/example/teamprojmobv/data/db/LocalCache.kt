@@ -23,7 +23,7 @@ class LocalCache(private val dao: DbDao) {
     fun getActualUsers(): LiveData<List<UserItem>> = dao.getActualUsers()
     fun getActualUser(): LiveData<UserItem> = dao.getActualUser()
 
-    fun deleteUsers() = dao.deleteUsers()
+    suspend fun deleteUsers() = dao.deleteUsers()
 
 
 

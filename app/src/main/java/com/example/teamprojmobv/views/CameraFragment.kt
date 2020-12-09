@@ -102,7 +102,7 @@ class CameraFragment : Fragment() {
     /** [CameraCharacteristics] corresponding to the provided Camera ID */
     val characteristics: CameraCharacteristics by lazy {
 //        cameraManager.getCameraCharacteristics(args.cameraId)
-        cameraManager.getCameraCharacteristics(idCamera)
+        cameraManager.getCameraCharacteristics(idCamera)    //predna/zadna kamera
     }
 
     /** File where the recording will be saved */
@@ -111,6 +111,7 @@ class CameraFragment : Fragment() {
     /**
      * Setup a persistent [Surface] for the recorder so we can use it as an output target for the
      * camera session without preparing the recorder
+     * pouzivatel ich nevadi
      */
     private val recorderSurface: Surface by lazy {
 
@@ -137,7 +138,8 @@ class CameraFragment : Fragment() {
     /** [Handler] corresponding to [cameraThread] */
     private val cameraHandler = Handler(cameraThread.looper)
 
-    /** Performs recording animation of flashing screen */
+    /** Performs recording animation of flashing screen
+     * aby pouzivatel vedel ci to nahrava*/
     private val animationTask: Runnable by lazy {
         Runnable {
             // Flash white animation
@@ -225,6 +227,7 @@ class CameraFragment : Fragment() {
         })
 
         // Used to rotate the output media to match device orientation
+        //zistovanie orientacie - ako je otoceny telefon
         relativeOrientation = OrientationLiveData(requireContext(), characteristics).apply {
             observe(viewLifecycleOwner, Observer {
                     orientation -> Log.d(TAG, "Orientation changed: $orientation")
@@ -270,7 +273,6 @@ class CameraFragment : Fragment() {
 //        }
 
         // Open the selected camera
-
         camera = openCamera(cameraManager, idCamera, cameraHandler)
 
         // Creates list of Surfaces where the camera will output frames
@@ -318,6 +320,7 @@ class CameraFragment : Fragment() {
                         ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
 
                     // Requires recording of at least MIN_REQUIRED_RECORDING_TIME_MILLIS
+                    //ak to pustime prilis skoro tak to nenahra prilis kratke video
                     val elapsedTimeMillis = System.currentTimeMillis() - recordingStartMillis
                     if (elapsedTimeMillis < MIN_REQUIRED_RECORDING_TIME_MILLIS) {
                         delay(MIN_REQUIRED_RECORDING_TIME_MILLIS - elapsedTimeMillis)
@@ -392,6 +395,7 @@ class CameraFragment : Fragment() {
     /**
      * Creates a [CameraCaptureSession] and returns the configured session (as the result of the
      * suspend coroutine)
+     * vytvorenie nahravania
      */
     private suspend fun createCaptureSession(
         device: CameraDevice,

@@ -1,10 +1,10 @@
-package com.example.teamprojmobv.Data.util
+package com.example.teamprojmobv.data.util
 
 import android.content.Context
 import androidx.lifecycle.ViewModelProvider
-import com.example.teamprojmobv.Data.DataRepository
-import com.example.teamprojmobv.Data.db.AppRoomDatabase
-import com.example.teamprojmobv.Data.db.LocalCache
+import com.example.teamprojmobv.data.DataRepository
+import com.example.teamprojmobv.data.db.AppRoomDatabase
+import com.example.teamprojmobv.data.db.LocalCache
 import com.opinyour.android.app.data.api.WebApi
 
 /**

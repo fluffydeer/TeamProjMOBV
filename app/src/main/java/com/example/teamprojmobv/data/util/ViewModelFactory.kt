@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.example.teamprojmobv.Data.util
+package com.example.teamprojmobv.data.util
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.teamprojmobv.views.viewModels.DatabaseViewModel
-import com.example.teamprojmobv.Data.DataRepository
+import com.example.teamprojmobv.data.DataRepository
 
 
 /**

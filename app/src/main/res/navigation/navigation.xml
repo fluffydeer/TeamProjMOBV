@@ -13,7 +13,8 @@
         <action
             android:id="@+id/action_titleFragment_to_videoViewerFragment"
             app:destination="@id/videoViewerFragment"
-             />
+            app:popUpTo="@id/permissionsFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_titleFragment_to_registerFragment"
             app:destination="@id/registerFragment"
@@ -38,9 +39,9 @@
     </fragment>
     <fragment
         android:id="@+id/videoViewerFragment"
-        android:name="com.example.teamprojmobv.views.VideoViewerFragment"
-        android:label="VideoViewerFragment"
-        tools:layout="@layout/fragment_video_viewer">
+        android:name="com.example.teamprojmobv.views.VideoScreen.VideoScreenFragment"
+        android:label="VideoScreenFragment"
+        tools:layout="@layout/video_item_recycler">
         <action
             android:id="@+id/action_videoViewerFragment_to_cameraFragment"
             app:destination="@id/cameraFragment" />
@@ -82,6 +83,7 @@
             app:destination="@id/cameraFragment" />
         <action
             android:id="@+id/action_videoUploadFragment_to_videoViewerFragment"
-            app:destination="@id/videoViewerFragment" />
+            app:destination="@id/videoViewerFragment"
+            app:popUpTo="@id/cameraFragment" />
     </fragment>
 </navigation>

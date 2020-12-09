@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.teamprojmobv.Data.util.Injection
+import com.example.teamprojmobv.data.util.Injection
 import com.example.teamprojmobv.R
 import com.example.teamprojmobv.databinding.FragmentProfileBinding
 import com.example.teamprojmobv.views.viewModels.DatabaseViewModel
@@ -67,6 +67,7 @@ class ProfileFragment : Fragment() {
             .placeholder(R.drawable.ic_profile_pic)
             .into(profileImage)
     }
+
 
     fun setUpProfileData(userInfo : UserItem){
         //TODO tu by som mala spristupnovat local cache ale narychlo som to nevedela

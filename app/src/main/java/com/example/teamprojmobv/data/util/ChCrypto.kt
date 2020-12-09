@@ -1,4 +1,4 @@
-package com.example.teamprojmobv.Data.util
+package com.example.teamprojmobv.data.util
 
 import java.util.Base64
 import javax.crypto.Cipher

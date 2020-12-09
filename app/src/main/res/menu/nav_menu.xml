@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <item
+            android:id="@+id/button_profile"
+            android:icon="@drawable/button_icon_profile_image"
+            android:title="@string/profile_pic"
+            />
+
+        <item
+            android:id="@+id/button_camera"
+            android:icon="@drawable/button_icon_camera"
+            android:title="@string/camera_button" />
+</menu>

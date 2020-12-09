@@ -1,10 +1,11 @@
 
-package com.example.teamprojmobv.Data
+package com.example.teamprojmobv.data
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import com.example.teamprojmobv.Data.db.LocalCache
-import com.example.teamprojmobv.Data.util.ChCrypto
+import com.example.teamprojmobv.data.db.LocalCache
+import com.example.teamprojmobv.data.db.model.MediaItem
+import com.example.teamprojmobv.data.util.ChCrypto
 import com.example.viewmodel.data.db.model.UserItem
 import com.opinyour.android.app.data.api.WebApi
 import okhttp3.MediaType
@@ -155,7 +156,7 @@ class DataRepository private constructor(
         return false
     }
     suspend fun getVideos(action: String,
-                          apikey: String){
+                          apikey: String) : ArrayList<MediaItem>? {
         try {
             val jsonObject = JSONObject()
             jsonObject.put("action", action)
@@ -168,7 +169,17 @@ class DataRepository private constructor(
             val response = api.getVideos(requestBody)
             if (response.isSuccessful) {
                 response.body()?.let {
-                    //TODO
+
+                    for(i in it){
+                        i.videourl = "http://api.mcomputing.eu/mobv/uploads/" + i.videourl
+                    }
+//                    (int i  = 0; i < it.size(); i++){
+//                        it.get(i).videourl = "http://api.mcomputing.eu/mobv/uploads/" + it.get(i).videourl;
+//                    }
+                    
+//                    val mediaData : MutableLiveData<MutableList<MediaItem>> = MutableLiveData(it)
+//                    val pom2 = mediaData.value?.get(1)?.videourl
+                    return it
                 }
             }
         } catch (ex: ConnectException) {
@@ -176,6 +187,7 @@ class DataRepository private constructor(
         } catch (ex: Exception) {
             ex.printStackTrace()
         }
+        return null
     }
 
 /*

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -12,37 +13,96 @@
 
     </com.google.android.exoplayer2.ui.PlayerView>
 
-    <FrameLayout
+<!--    <FrameLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:padding="20dp">-->
+
+<!--        <Button-->
+<!--            android:id="@+id/button_profile"-->
+<!--            android:layout_width="50dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:layout_gravity="top|end"-->
+<!--            android:background="@drawable/button_icon_profile_image" />-->
+
+<!--        <Button-->
+<!--            android:id="@+id/button_camera"-->
+<!--            android:layout_width="50dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:layout_gravity="start|top"-->
+<!--            android:background="@drawable/button_icon_camera" />-->
+
+<!--        <Button-->
+<!--            android:id="@+id/button_upload"-->
+<!--            android:layout_width="50dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:layout_gravity="center|top"-->
+<!--            android:background="@drawable/ic_share" />-->
+
+<!--        <Button-->
+<!--            android:id="@+id/button_prispevky"-->
+<!--            android:layout_width="50dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:layout_gravity="center|start"-->
+<!--            android:background="@drawable/prispevky" />-->
+<!--    </FrameLayout>-->
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="20dp">
+        android:layout_height="wrap_content"
+        android:background="#4A4949"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_gravity="top">
 
         <Button
             android:id="@+id/button_profile"
-            android:layout_width="50dp"
+            android:layout_width="45dp"
             android:layout_height="50dp"
-            android:layout_gravity="top|end"
-            android:background="@drawable/button_icon_profile_image" />
+            android:background="@drawable/button_icon_profile_image"
+            android:backgroundTint="#FDFCFC"
+            android:contentDescription="@string/profile_pic"
+            android:title="@string/profile_pic"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/button_camera" />
 
         <Button
             android:id="@+id/button_camera"
-            android:layout_width="50dp"
+            android:layout_width="45dp"
             android:layout_height="50dp"
-            android:layout_gravity="start|top"
-            android:background="@drawable/button_icon_camera" />
+            android:background="@drawable/button_icon_camera"
+            android:backgroundTint="#FDFCFC"
+            android:contentDescription="@string/profile_pic"
+            android:title="@string/profile_pic"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/button_profile"
+            app:layout_constraintRight_toLeftOf="@id/button_upload" />
 
         <Button
             android:id="@+id/button_upload"
-            android:layout_width="50dp"
+            android:layout_width="45dp"
             android:layout_height="50dp"
-            android:layout_gravity="center|top"
-            android:background="@drawable/ic_share" />
+            android:background="@drawable/ic_share"
+            android:backgroundTint="#FDFCFC"
+            android:contentDescription="@string/profile_pic"
+            android:title="@string/profile_pic"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/button_camera"
+            app:layout_constraintRight_toLeftOf="@id/button_prispevky" />
 
         <Button
             android:id="@+id/button_prispevky"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center|start"
-            android:background="@drawable/prispevky" />
-    </FrameLayout>
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:background="@drawable/prispevky"
+            android:backgroundTint="#FBFBFB"
+            android:contentDescription="@string/camera_button"
+            android:title="@string/camera_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/button_upload"
+            app:layout_constraintRight_toRightOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 </FrameLayout>

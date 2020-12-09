@@ -1,4 +1,4 @@
-package com.example.teamprojmobv.Data.db.model
+package com.example.teamprojmobv.data.db.model
 
 data class VideoItem (
     val postid: Int,

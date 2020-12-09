@@ -1,7 +1,9 @@
 package com.opinyour.android.app.data.api
 
 import android.content.Context
-import com.example.teamprojmobv.Data.db.model.VideoItem
+import androidx.lifecycle.MutableLiveData
+import com.example.teamprojmobv.data.db.model.MediaItem
+import com.example.teamprojmobv.data.db.model.VideoItem
 import com.example.viewmodel.data.db.model.UserItem
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
@@ -37,7 +39,7 @@ interface WebApi {
     suspend fun changePassword(@Body requestBody: RequestBody): Response<UserItem>
 
     @POST("/mobv/service.php")
-    suspend fun getVideos(@Body requestBody: RequestBody): Response<List<VideoItem>>
+    suspend fun getVideos(@Body requestBody: RequestBody): Response<ArrayList<MediaItem>>
 
     /* @GET("/mobv/service.php")
     suspend fun existsUser(@Header("Content-Type") "application/json" : String, @Body requestBody: RequestBody): Response<ExistsItem>*/

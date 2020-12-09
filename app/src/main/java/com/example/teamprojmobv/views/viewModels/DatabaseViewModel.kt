@@ -2,8 +2,9 @@ package com.example.teamprojmobv.views.viewModels
 
 
 import androidx.lifecycle.*
-import com.example.teamprojmobv.Data.ApiConstants
-import com.example.teamprojmobv.Data.DataRepository
+import com.example.teamprojmobv.data.ApiConstants
+import com.example.teamprojmobv.data.DataRepository
+import com.example.teamprojmobv.data.db.model.MediaItem
 import com.example.viewmodel.data.db.model.UserItem
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -14,6 +15,15 @@ class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
     val username: MutableLiveData<String> = MutableLiveData()
     val password: MutableLiveData<String> = MutableLiveData()
 
+
+    private var mediaData:ArrayList<MediaItem>? = ArrayList<MediaItem>()
+
+
+//    fun getMedia(): MutableLiveData<MutableList<MediaItem>>?{
+//
+//        val pom = mediaData?.value?.get(1)?.videourl
+//        return mediaData
+//    }
 
     /*val actualUsers: LiveData<List<UserItem>>
         get() = repository.getActualUsers()*/
@@ -42,10 +52,12 @@ class DatabaseViewModel(private val repository: DataRepository) : ViewModel() {
                 ApiConstants.API_KEY, (username.value!!), (password.value!!))
         }
     }
-    fun getVideos() {
-        viewModelScope.launch {
+    fun getVideos() : ArrayList<MediaItem>?{
+        val result = runBlocking {
             repository.getVideos(ApiConstants.POSTS_CONST, ApiConstants.API_KEY)
+            // DatabaseViewModel.getVideos
         }
+        return result
     }
 
     // ako logout??

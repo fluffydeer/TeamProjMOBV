@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import com.example.teamprojmobv.Data.util.Injection
+import com.example.teamprojmobv.data.util.Injection
 import com.example.teamprojmobv.MainActivity
 import com.example.teamprojmobv.R
 import com.example.teamprojmobv.views.viewModels.DatabaseViewModel
@@ -16,9 +16,8 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.util.Util
 import kotlinx.android.synthetic.main.fragment_video_upload.*
-import kotlinx.android.synthetic.main.fragment_video_viewer.*
-import kotlinx.android.synthetic.main.fragment_video_viewer.button_camera
-import kotlinx.android.synthetic.main.fragment_video_viewer.button_profile
+//import kotlinx.android.synthetic.main.fragment_video_viewer.button_camera
+//import kotlinx.android.synthetic.main.fragment_video_viewer.button_profile
 import kotlinx.android.synthetic.main.fragment_video_viewer.player_view
 
 
@@ -108,7 +107,7 @@ class VideoUploadFragment : Fragment() {
         val mediaItem = MediaItem.Builder().setUri(MainActivity.recVideoPath).build()
         mPlayer!!.addMediaItem(mediaItem)
         mPlayer!!.prepare()
-//        mPlayer!!.play()   // autoplay
+        mPlayer!!.play()   // autoplay
 
     }
 

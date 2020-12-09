@@ -1,4 +1,4 @@
-package com.example.teamprojmobv.Data.db
+package com.example.teamprojmobv.data.db
 
 import android.content.Context
 import androidx.room.Database

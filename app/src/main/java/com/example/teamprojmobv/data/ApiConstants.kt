@@ -1,4 +1,4 @@
-package com.example.teamprojmobv.Data
+package com.example.teamprojmobv.data
 
 object ApiConstants{
     const val API_KEY = "yS9zD3dI4uR2aK0cY9cS5pT6tK2rZ6"

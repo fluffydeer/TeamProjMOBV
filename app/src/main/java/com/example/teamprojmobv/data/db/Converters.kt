@@ -1,4 +1,4 @@
-package com.example.teamprojmobv.Data.db
+package com.example.teamprojmobv.data.db
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson

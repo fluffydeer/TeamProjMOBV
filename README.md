@@ -11,5 +11,8 @@ This app is a result of a group project for a course named Mobile Computing. Our
 -use RecyclerView for scrolling the feed  
 -play videos in feed  
 
+![alt text](https://github.com/fluffydeer/team-project-mobile-computing/blob/master/app/src/main/res/drawable/login.png?raw=true)
+![alt text](https://github.com/fluffydeer/team-project-mobile-computing/blob/master/app/src/main/res/drawable/feed.png?raw=true)
+![alt text](https://github.com/fluffydeer/team-project-mobile-computing/blob/master/app/src/main/res/drawable/profile.png?raw=true)
 
 
